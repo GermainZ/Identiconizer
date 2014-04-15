@@ -1,0 +1,55 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.germainz.identiconizer"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19"/>
+
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <application
+        android:icon="@drawable/ic_identicons_style_retro"
+        android:label="@string/app_name">
+        <activity android:name="com.germainz.identiconizer.IdenticonsSettings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".receivers.BootCompletedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.ContactsObserverService"
+            android:exported="false"/>
+
+        <service
+            android:name=".services.IdenticonCreationService"
+            android:exported="false"/>
+
+        <service
+            android:name=".services.IdenticonRemovalService"
+            android:exported="false"/>
+
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true"/>
+        <meta-data
+            android:name="xposedminversion"
+            android:value="2.0*"/>
+        <meta-data
+            android:name="xposeddescription"
+            android:value="@string/xposed_description"/>
+
+    </application>
+
+</manifest>

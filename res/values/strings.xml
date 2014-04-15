@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+** Original work Copyright 2013 The ChameleonOS Open Source Project
+** Modified work Copyright 2013 GermainZ@xda-developers.com
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources>
+
+    <string name="app_name">Identiconizer!</string>
+
+    <string name="identicons_title">@string/app_name</string>
+    <string name="xposed_description">Optional Xposed module. Used instead of the service to create
+        identicons for new contacts.
+    </string>
+    <string name="identicons_enabled_title">Identicons</string>
+    <string name="identicons_enabled_summary">Use identicon as default contact picture when creating
+        new contacts
+    </string>
+    <string name="identicons_style_title">Identicon style</string>
+    <string name="identicons_style_summary">Choose an identicon style to use</string>
+    <string name="identicons_create_title">Create identicons</string>
+    <string name="identicons_create_summary">Create identicons for existing contacts without a
+        contact photo and update set identicons
+    </string>
+    <string name="identicons_creation_service_running_title">Creating identicons</string>
+    <string name="identicons_creation_service_running_summary"></string>
+    <string name="identicons_creation_service_contact_summary">Processing %s</string>
+    <string name="identicons_remove_title">Remove identicons</string>
+    <string name="identicons_remove_summary">Remove identicon from contacts that have one set
+    </string>
+    <string name="identicons_remove_service_running_title">Removing identicons</string>
+    <string name="identicons_remove_service_running_summary"></string>
+    <string name="identicons_remove_service_contact_summary">Processing photo %1$d/%2$d</string>
+    <string name="identicons_remove_service_contact_summary_finishing">Tying up loose ends…</string>
+    <string name="identicons_size_title">Identicon Size</string>
+    <string name="identicons_size_summary">Contact photo size</string>
+    <string name="about_title">About Identiconizer!</string>
+    <string name="about_summary">Author, licenses, and support information</string>
+
+    <string name="identicons_style_retro">Retro</string>
+    <string name="identicons_style_contemporary">Contemporary</string>
+    <string name="identicons_style_spirograph">Spirograph</string>
+    <string name="identicons_style_dotmatrix">Dot matrix</string>
+
+    <string name="dialog_ok">Done</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <string name="about">• Identiconizer! by GermainZ. Click
+        <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>
+        for the support thread.\n•
+        This application uses code and resources from the
+        <a href="http://chameleonos.org">ChameleonOS Open Source Project</a>.\n•
+        The <a href="http://forum.xda-developers.com/showthread.php?t=1574401">Xposed Bridge
+            API</a>, by rovo89 and Tungstwenty, is also used.\n•
+        Identiconizer!, the ChameleonOS Open Source Project and the Xposed Framework are all
+        licensed under the <a href="http://apache.org/licenses/LICENSE-2.0">Apache License, Version
+            2.0</a>.
+    </string>
+
+</resources>
