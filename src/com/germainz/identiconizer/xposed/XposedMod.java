@@ -40,7 +40,7 @@ public class XposedMod implements IXposedHookLoadPackage {
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if ("com.android.providers.contacts".equals(lpparam.packageName)) {
             findAndHookMethod("com.android.providers.contacts.DataRowHandlerForStructuredName",
-                    null, "insert", SQLiteDatabase.class,
+                    lpparam.classLoader, "insert", SQLiteDatabase.class,
                     "com.android.providers.contacts.TransactionContext",
                     long.class, ContentValues.class, new XC_MethodHook() {
 

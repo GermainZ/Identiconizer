@@ -26,7 +26,7 @@ public class Config {
     private XSharedPreferences mXPreferences = null;
     private SharedPreferences mPreferences = null;
 
-    public static final String PACKAGE_NAME = "com.germainz.identicons";
+    public static final String PACKAGE_NAME = "com.germainz.identiconizer";
     public static final String PREFS = PACKAGE_NAME + "_preferences";
     public static final String PREF_ENABLED = "identicons_enabled";
     public static final String PREF_STYLE = "identicons_style";
