@@ -93,7 +93,9 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             }
         });
 
-        Preference identiconsSizePref = findPreference(Config.PREF_SIZE);
+        final Preference identiconsSizePref = findPreference(Config.PREF_SIZE);
+        final int identiconSize = mConfig.getIdenticonSize();
+        identiconsSizePref.setSummary(identiconSize + " × " + identiconSize);
         identiconsSizePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -104,7 +106,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                 final int step = 16;
                 String[] valueSet = new String[(maxValue - minValue) / step + 1];
                 for (int i = minValue; i <= maxValue; i += step) {
-                    valueSet[(i - minValue) / step] = String.valueOf(i);
+                    valueSet[(i - minValue) / step] = i + " × " + i;
                 }
                 npView.setMinValue(0);
                 npView.setMaxValue(valueSet.length - 1);
@@ -118,6 +120,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 int value = npView.getValue() * step + minValue;
                                 mConfig.setIdenticonSize(value);
+                                identiconsSizePref.setSummary(value + " × " + value);
                             }
                         })
                         .setNegativeButton(R.string.dialog_cancel, null)
