@@ -33,6 +33,7 @@ public class Config {
     public static final String PREF_SIZE = "identicons_size";
     public static final String PREF_CREATE = "identicons_create";
     public static final String PREF_REMOVE = "identicons_remove";
+    public static final String PREF_CONTACTS_LIST = "identicons_contacts_list";
     public static final String PREF_ABOUT = "about";
     public static final String PREF_MAX_CONTACT_ID = "max_contact_id";
 

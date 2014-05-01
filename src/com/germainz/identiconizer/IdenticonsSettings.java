@@ -84,6 +84,15 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             }
         });
 
+        Preference contactsListPref = findPreference(Config.PREF_CONTACTS_LIST);
+        contactsListPref .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(IdenticonsSettings.this, ContactsListActivity.class));
+                return true;
+            }
+        });
+
         Preference identiconsSizePref = findPreference(Config.PREF_SIZE);
         identiconsSizePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

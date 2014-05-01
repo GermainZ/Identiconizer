@@ -30,8 +30,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.germainz.identiconizer.ContactInfo;
 import com.germainz.identiconizer.IdenticonsSettings;
 import com.germainz.identiconizer.R;
 import com.germainz.identiconizer.identicons.IdenticonUtils;
@@ -51,7 +53,15 @@ public class IdenticonRemovalService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         startForeground(SERVICE_NOTIFICATION_ID, createNotification());
-        processPhotos();
+        // If a predefined contacts list is provided, use it directly.
+        // contactsList is set when this service is started from ContactsListActivity.
+        if (intent.hasExtra("contactsList")) {
+            ArrayList<ContactInfo> contactsList = intent.getParcelableArrayListExtra("contactsList");
+            processPhotos(contactsList);
+        } else {
+            processPhotos();
+        }
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("CONTACTS_UPDATED"));
         stopForeground(true);
     }
 
@@ -84,9 +94,30 @@ public class IdenticonRemovalService extends IntentService {
         }
     }
 
+    private void processPhotos(ArrayList<ContactInfo> contactInfos) {
+        for (int i = 0, j = contactInfos.size(); i < j; i++) {
+            updateNotification(getString(R.string.identicons_remove_service_running_title),
+                    String.format(getString(R.string.identicons_remove_service_contact_summary),
+                            i, j));
+            removeIdenticon(contactInfos.get(i).nameRawContactId);
+        }
+
+        if (!mOps.isEmpty()) {
+            updateNotification(getString(R.string.identicons_remove_service_running_title),
+                    getString(R.string.identicons_remove_service_contact_summary_finishing));
+            try {
+                // Perform operations in batches of 100, to avoid TransactionTooLargeExceptions
+                for (int i = 0, j = mOps.size(); i < j; i += 100)
+                    getContentResolver().applyBatch(ContactsContract.AUTHORITY, new ArrayList<>(mOps.subList(i, i + Math.min(100, j - i))));
+            } catch (RemoteException | OperationApplicationException e) {
+                Log.e(TAG, "Unable to apply batch", e);
+            }
+        }
+    }
+
     private Cursor getIdenticonPhotos() {
         Uri uri = ContactsContract.Data.CONTENT_URI;
-        String[] projection = new String[]{ContactsContract.Data._ID,
+        String[] projection = new String[]{ContactsContract.Data.RAW_CONTACT_ID,
                 ContactsContract.Data.DATA15};
         final String selection = ContactsContract.Data.DATA15
                 + " IS NOT NULL AND "
@@ -100,7 +131,7 @@ public class IdenticonRemovalService extends IntentService {
     private void removeIdenticon(long id) {
         ContentValues values = new ContentValues();
         values.put(ContactsContract.Data.DATA15, (byte[]) null);
-        final String selection = ContactsContract.Data._ID
+        final String selection = ContactsContract.Data.RAW_CONTACT_ID
                 + " = ? AND "
                 + ContactsContract.Data.MIMETYPE
                 + " = ?";

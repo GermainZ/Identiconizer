@@ -51,6 +51,12 @@
         android:dependency="identicons_enabled"/>
 
     <Preference
+        android:key="identicons_contacts_list"
+        android:title="@string/identicons_contacts_list_title"
+        android:summary="@string/identicons_contacts_list_summary"
+        android:dependency="identicons_enabled"/>
+
+    <Preference
         android:key="about"
         android:title="@string/about_title"
         android:summary="@string/about_summary"/>

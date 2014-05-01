@@ -41,6 +41,10 @@
     <string name="identicons_remove_title">Remove identicons</string>
     <string name="identicons_remove_summary">Remove identicon from contacts that have one set
     </string>
+    <string name="identicons_contacts_list_title">Contacts list</string>
+    <string name="identicons_contacts_list_summary">View contacts list and manage identicons
+        for wanted contacts
+    </string>
     <string name="identicons_remove_service_running_title">Removing identicons</string>
     <string name="identicons_remove_service_running_summary"></string>
     <string name="identicons_remove_service_contact_summary">Processing photo %1$d/%2$d</string>
@@ -57,6 +61,8 @@
 
     <string name="dialog_ok">Done</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="button_add">Add identicons to selected contacts</string>
+    <string name="button_clear">Remove contact photos for selected contacts</string>
 
     <string name="about">• Identiconizer! by GermainZ. Click
         <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>

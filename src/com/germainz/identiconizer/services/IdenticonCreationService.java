@@ -28,14 +28,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.germainz.identiconizer.ContactInfo;
 import com.germainz.identiconizer.identicons.IdenticonFactory;
 import com.germainz.identiconizer.identicons.IdenticonUtils;
 import com.germainz.identiconizer.IdenticonsSettings;
 import com.germainz.identiconizer.R;
 import com.germainz.identiconizer.identicons.Identicon;
+
+import java.util.ArrayList;
 
 public class IdenticonCreationService extends IntentService {
     private static final String TAG = "IdenticonCreationService";
@@ -48,13 +52,22 @@ public class IdenticonCreationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         startForeground(SERVICE_NOTIFICATION_ID, createNotification());
-        // If updateExisting is set to false, only contacts without a picture will get a new one.
-        // Otherwise, even those that have an identicon set will get a new one. The latter is useful
-        // when changing identicon styles, but is a waste of time when we're starting this service
-        // after a new contact has been added. In that case, we just want the new contact to get his
-        // identicon.
-        boolean updateExisting = intent.getBooleanExtra("updateExisting", true);
-        processContacts(updateExisting);
+        // If a predefined contacts list is provided, use it directly.
+        // contactsList is set when this service is started from ContactsListActivity.
+        if (intent.hasExtra("contactsList")) {
+            ArrayList<ContactInfo> contactsList = intent.getParcelableArrayListExtra("contactsList");
+            processContacts(contactsList);
+        } else {
+            // If updateExisting is set to false, only contacts without a picture will get a new one.
+            // Otherwise, even those that have an identicon set will get a new one. The latter is useful
+            // when changing identicon styles, but is a waste of time when we're starting this service
+            // after a new contact has been added. In that case, we just want the new contact to get his
+            // identicon.
+            boolean updateExisting = intent.getBooleanExtra("updateExisting", true);
+            processContacts(updateExisting);
+        }
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("CONTACTS_UPDATED"));
+        getContentResolver().notifyChange(ContactsContract.Data.CONTENT_URI, null);
         stopForeground(true);
     }
 
@@ -72,7 +85,11 @@ public class IdenticonCreationService extends IntentService {
             }
         }
         cursor.close();
-        getContentResolver().notifyChange(ContactsContract.Data.CONTENT_URI, null);
+    }
+
+    private void processContacts(ArrayList<ContactInfo> contactInfos) {
+        for (ContactInfo contactInfo : contactInfos)
+            generateIdenticon(contactInfo.nameRawContactId, contactInfo.contactName);
     }
 
     private Cursor getContacts() {

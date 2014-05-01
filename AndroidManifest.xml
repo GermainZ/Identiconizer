@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ContactsListActivity"/>
+
         <receiver
             android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
