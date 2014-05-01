@@ -5,13 +5,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="6dip">
+                android:padding="8dip">
 
     <ImageView
             android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="6dip" />
+            android:src="@drawable/ic_identicons_style_retro"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_marginRight="8dip" />
 
     <CheckedTextView
             android:id="@+id/check"
@@ -20,6 +21,7 @@
             android:layout_toRightOf="@id/image"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
-            android:textSize="20dip" />
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:textSize="20sp" />
 
 </RelativeLayout>

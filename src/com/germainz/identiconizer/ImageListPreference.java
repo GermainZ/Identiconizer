@@ -19,7 +19,6 @@ package com.germainz.identiconizer;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
@@ -33,7 +32,6 @@ import android.widget.ListAdapter;
 
 public class ImageListPreference extends ListPreference {
     private int[] mResourceIds = null;
-    private int mRadioDrawableId;
 
     /**
      * Constructor of the ImageListPreference. Initializes the custom images.
@@ -60,11 +58,6 @@ public class ImageListPreference extends ListPreference {
         }
 
         typedArray.recycle();
-
-        // in order to use the holo themed radio button we must get the id
-        // from the system resources and then get the drawable for that id
-        // Because it uses reflection twice, we'll store this value for future use.
-        mRadioDrawableId = Resources.getSystem().getIdentifier("btn_radio_holo_dark", "drawable", "android");
     }
 
     /**
@@ -115,7 +108,6 @@ public class ImageListPreference extends ListPreference {
                     R.id.check);
 
             checkedTextView.setText(getItem(position));
-            checkedTextView.setCheckMarkDrawable(Resources.getSystem().getDrawable(mRadioDrawableId));
 
             if (position == index) {
                 checkedTextView.setChecked(true);
