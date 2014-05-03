@@ -54,6 +54,8 @@ public class ContactsListActivity extends ListActivity {
     ArrayList<Integer> checkedItems = new ArrayList<>();
     ContactsCursorAdapter mAdapter;
     Cursor mCursor;
+    final static int SERVICE_ADD = 0;
+    final static int SERVICE_REMOVE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,27 +108,47 @@ public class ContactsListActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        SparseBooleanArray checkedValues = getListView().getCheckedItemPositions();
-        int displayName = mCursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME);
-        Intent intent = null;
         switch (item.getItemId()) {
             case R.id.action_add:
-                intent = new Intent(this, IdenticonCreationService.class);
+                startIdenticonService(SERVICE_ADD);
                 break;
             case R.id.action_clear:
-                intent = new Intent(this, IdenticonRemovalService.class);
+                startIdenticonService(SERVICE_REMOVE);
+                break;
+            case R.id.action_select_all:
+                checkedItems.clear();
+                for (int i = 0, j = mAdapter.getCount(); i < j; i++)
+                    checkedItems.add(i);
+                mAdapter.notifyDataSetChanged();
+                break;
+            case R.id.action_deselect_all:
+                checkedItems.clear();
+                mAdapter.notifyDataSetChanged();
                 break;
         }
+        return true;
+    }
+
+    private void startIdenticonService(int serviceType) {
+        int displayName = mCursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME);
         ArrayList<ContactInfo> contactsList = new ArrayList<>();
         int contactId = mCursor.getColumnIndexOrThrow("name_raw_contact_id");
         mCursor.moveToPosition(-1);
         while (mCursor.moveToNext()) {
-            if (checkedValues.get(mCursor.getPosition()))
+            if (checkedItems.contains(mCursor.getPosition()))
                 contactsList.add(new ContactInfo(mCursor.getInt(contactId), mCursor.getString(displayName)));
+        }
+        Intent intent = null;
+        switch (serviceType) {
+            case SERVICE_ADD:
+                intent = new Intent(this, IdenticonCreationService.class);
+                break;
+            case SERVICE_REMOVE:
+                intent = new Intent(this, IdenticonRemovalService.class);
+                break;
         }
         intent.putParcelableArrayListExtra("contactsList", contactsList);
         startService(intent);
-        return true;
     }
 
     private Cursor getContacts() {
@@ -147,7 +169,7 @@ public class ContactsListActivity extends ListActivity {
         private LayoutInflater layoutInflater;
         private int layout;
 
-        public ContactsCursorAdapter (Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+        public ContactsCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
             super(context, layout, c, from, to, flags);
             layoutInflater = LayoutInflater.from(context);
             this.layout = layout;

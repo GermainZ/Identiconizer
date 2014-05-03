@@ -11,4 +11,12 @@
         android:showAsAction="always"
         android:icon="@drawable/ic_action_clear"
         android:title="@string/button_clear" />
+    <item
+        android:id="@+id/action_select_all"
+        android:showAsAction="never"
+        android:title="@string/button_select_all" />
+    <item
+        android:id="@+id/action_deselect_all"
+        android:showAsAction="never"
+        android:title="@string/button_deselect_all" />
 </menu>

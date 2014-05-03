@@ -61,8 +61,10 @@
 
     <string name="dialog_ok">Done</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="button_add">Add identicons to selected contacts</string>
+    <string name="button_add">Create identicons for selected contacts</string>
     <string name="button_clear">Remove contact photos for selected contacts</string>
+    <string name="button_select_all">Select all</string>
+    <string name="button_deselect_all">Deselect all</string>
 
     <string name="about">• Identiconizer! by GermainZ. Click
         <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>
