@@ -66,6 +66,8 @@ public class ContactsListActivity extends ListActivity {
         mAdapter = new ContactsCursorAdapter(this, R.layout.image_list_item, mCursor, fromColumns, toViews, 0);
         setListAdapter(mAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle(R.string.identicons_contacts_list_title);
     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -124,6 +126,9 @@ public class ContactsListActivity extends ListActivity {
             case R.id.action_deselect_all:
                 checkedItems.clear();
                 mAdapter.notifyDataSetChanged();
+                break;
+            case android.R.id.home:
+                onBackPressed();
                 break;
         }
         return true;
