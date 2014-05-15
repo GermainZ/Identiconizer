@@ -129,7 +129,8 @@ public class IdenticonCreationService extends IntentService {
         if (!TextUtils.isEmpty(name)) {
             updateNotification(getString(R.string.identicons_creation_service_running_title),
                     String.format(getString(R.string.identicons_creation_service_contact_summary),
-                            name));
+                            name)
+            );
             final Identicon identicon = IdenticonFactory.makeIdenticon(this);
             final byte[] identiconImage = identicon.generateIdenticonByteArray(name);
             if (identicon == null) {
@@ -142,6 +143,7 @@ public class IdenticonCreationService extends IntentService {
 
     private void setContactPhoto(ContentResolver resolver, byte[] bytes, long personId) {
         ContentValues values = new ContentValues();
+        int photoRow = -1;
         String where = ContactsContract.Data.RAW_CONTACT_ID + " == "
                 + String.valueOf(personId) + " AND " + ContactsContract.Data.MIMETYPE + "=='"
                 + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'";
@@ -151,27 +153,41 @@ public class IdenticonCreationService extends IntentService {
                 where,
                 null,
                 null);
+        int idIdx = cursor.getColumnIndexOrThrow(ContactsContract.Data._ID);
+        if (cursor.moveToFirst()) {
+            photoRow = cursor.getInt(idIdx);
+        }
         cursor.close();
 
-
-        final String selection = ContactsContract.Data.RAW_CONTACT_ID
-                + " = ? AND "
-                + ContactsContract.Data.MIMETYPE
-                + " = ?";
-        final String[] selectionArgs = new String[]{
-                String.valueOf(personId),
-                ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE};
-        values.put(ContactsContract.Data.RAW_CONTACT_ID, personId);
-        values.put(ContactsContract.Data.IS_PRIMARY, 1);
-        values.put(ContactsContract.Data.IS_SUPER_PRIMARY, 1);
-        values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, bytes);
-        values.put("skip_processing", "skip_processing");
-        // We're not using applyBatch because of the 512K limit of the transaction buffer,
-        // which isn't enough when we're using a large identicon size and certain styles (e.g.
-        // the Spirograph style, which occupies roughly that much on its own when the size is
-        // set to 720x720.)
-        if (getContentResolver().update(ContactsContract.Data.CONTENT_URI, values, selection, selectionArgs) != 1)
-            Log.d(TAG, "Couldn't update raw_contact_id " + Long.toString(personId));
+        if (photoRow >= 0) {
+            final String selection = ContactsContract.Data.RAW_CONTACT_ID
+                    + " = ? AND "
+                    + ContactsContract.Data.MIMETYPE
+                    + " = ?";
+            final String[] selectionArgs = new String[]{
+                    String.valueOf(personId),
+                    ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE};
+            values.put(ContactsContract.Data.RAW_CONTACT_ID, personId);
+            values.put(ContactsContract.Data.IS_PRIMARY, 1);
+            values.put(ContactsContract.Data.IS_SUPER_PRIMARY, 1);
+            values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, bytes);
+            values.put("skip_processing", "skip_processing");
+            // We're not using applyBatch because of the 512K limit of the transaction buffer,
+            // which isn't enough when we're using a large identicon size and certain styles (e.g.
+            // the Spirograph style, which occupies roughly that much on its own when the size is
+            // set to 720x720.)
+            if (getContentResolver().update(ContactsContract.Data.CONTENT_URI, values, selection, selectionArgs) != 1)
+                Log.d(TAG, "(1) Couldn't update raw_contact_id " + Long.toString(personId));
+        } else {
+            values.put(ContactsContract.Data.RAW_CONTACT_ID, personId);
+            values.put(ContactsContract.Data.IS_PRIMARY, 1);
+            values.put(ContactsContract.Data.IS_SUPER_PRIMARY, 1);
+            values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, bytes);
+            values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
+            values.put("skip_processing", "skip_processing");
+            if (getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values) == null)
+                Log.d(TAG, "(2) Couldn't update raw_contact_id " + Long.toString(personId));
+        }
     }
 
     private Notification createNotification() {
