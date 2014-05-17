@@ -16,8 +16,6 @@
 
 package com.germainz.identiconizer.identicons;
 
-import com.germainz.identiconizer.identicons.Identicon;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 

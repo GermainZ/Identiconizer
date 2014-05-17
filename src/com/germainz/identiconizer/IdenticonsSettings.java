@@ -267,7 +267,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
     }
 
     public String colorIntToRGB(int color) {
-        return String.format("%08X", (0xFFFFFFFF & color));
+        return String.format("%08X", color);
     }
 
 }

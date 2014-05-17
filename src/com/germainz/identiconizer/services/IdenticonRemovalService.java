@@ -87,7 +87,8 @@ public class IdenticonRemovalService extends IntentService {
             try {
                 // Perform operations in batches of 100, to avoid TransactionTooLargeExceptions
                 for (int i = 0, j = mOps.size(); i < j; i += 100)
-                    getContentResolver().applyBatch(ContactsContract.AUTHORITY, new ArrayList<>(mOps.subList(i, i + Math.min(100, j - i))));
+                    getContentResolver().applyBatch(ContactsContract.AUTHORITY,
+                            new ArrayList<ContentProviderOperation>(mOps.subList(i, i + Math.min(100, j - i))));
             } catch (RemoteException | OperationApplicationException e) {
                 Log.e(TAG, "Unable to apply batch", e);
             }
@@ -108,7 +109,8 @@ public class IdenticonRemovalService extends IntentService {
             try {
                 // Perform operations in batches of 100, to avoid TransactionTooLargeExceptions
                 for (int i = 0, j = mOps.size(); i < j; i += 100)
-                    getContentResolver().applyBatch(ContactsContract.AUTHORITY, new ArrayList<>(mOps.subList(i, i + Math.min(100, j - i))));
+                    getContentResolver().applyBatch(ContactsContract.AUTHORITY,
+                            new ArrayList<ContentProviderOperation>(mOps.subList(i, i + Math.min(100, j - i))));
             } catch (RemoteException | OperationApplicationException e) {
                 Log.e(TAG, "Unable to apply batch", e);
             }
