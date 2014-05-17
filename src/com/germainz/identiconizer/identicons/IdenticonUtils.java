@@ -21,16 +21,17 @@ import java.util.Arrays;
 
 public class IdenticonUtils {
 
-    private static final byte[] JPG_HEADER = new byte[] { (byte)0xFF, (byte)0xD8 };
+    private static final byte[] PNG_HEADER = new byte[] { (byte) 137, (byte) 80, (byte) 78,
+            (byte) 71, (byte) 13, (byte) 10, (byte) 26, (byte) 10 };
 
     public static boolean isIdenticon(byte[] data) {
-        if (data == null || !isJpgFormat(data))
+        if (data == null || !isPngFormat(data))
             return false;
 
-        byte[] tag = Arrays.copyOfRange(data, data.length - 18, data.length - 2);
+        byte[] tag = Arrays.copyOfRange(data, data.length - (Identicon.IDENTICON_MARKER.length() + 1), data.length - 1);
         String tagString;
         try {
-            tagString = new String(tag, "US-ASCII");
+            tagString = new String(tag, "ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
             return false;
         }
@@ -38,12 +39,12 @@ public class IdenticonUtils {
         return Identicon.IDENTICON_MARKER.equals(tagString);
     }
 
-    private static boolean isJpgFormat(byte[] data) {
-        if (data.length < JPG_HEADER.length)
+    private static boolean isPngFormat(byte[] data) {
+        if (data.length < PNG_HEADER.length)
             return false;
 
-        for (int i = 0; i < JPG_HEADER.length; i++) {
-            if (data[i] != JPG_HEADER[i])
+        for (int i = 0; i < PNG_HEADER.length; i++) {
+            if (data[i] != PNG_HEADER[i])
                 return false;
         }
 

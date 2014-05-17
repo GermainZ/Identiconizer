@@ -87,33 +87,29 @@ public abstract class Identicon {
     }
 
     /**
-     * Adds a comment block to the end of a byte array containing a jpg image
+     * Adds a chunk to the end of a byte array containing a png image
      *
-     * @param original The jpg image to add the comment to
-     * @return The same image provided with the added comment block
+     * @param original The png image to add the comment to
+     * @return The same image provided with the added chunk
      */
     protected static byte[] makeTaggedIdenticon(byte[] original) {
         byte[] taggedBlock = makeTextBlock(IDENTICON_MARKER);
         byte[] taggedImage = new byte[original.length + taggedBlock.length];
         ByteBuffer buffer = ByteBuffer.wrap(taggedImage);
-        buffer.put(original, 0, original.length - 2);
+        buffer.put(original);
         buffer.put(taggedBlock);
-        buffer.put(original, original.length - 2, 2);
         return taggedImage;
     }
 
     private static byte[] makeTextBlock(String text) {
-        byte[] block = new byte[text.length() + 5];
+        byte[] block = new byte[text.length() + 1];
         ByteBuffer blockBuffer = ByteBuffer.wrap(block);
-        final int length = text.length();
-        // block type, which is 0xFFFE for comment block
-        blockBuffer.putShort((short) 0xFFFE);
-        // next two bytes is string length
-        blockBuffer.putShort((short) length);
-        // followed by a null
-        blockBuffer.put((byte) 0);
-        // and finally our string
+        // http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
+        // put the text as the chunk's keyword
         blockBuffer.put(text.getBytes());
+        // followed by a null separator
+        blockBuffer.put((byte) 0);
+        // we leave the chunk's text empty
 
         return block;
     }
@@ -121,17 +117,8 @@ public abstract class Identicon {
     protected static byte[] bitmapToByteArray(Bitmap bmp) {
         if (bmp == null) return null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] bytes = stream.toByteArray();
-        // The transaction buffer's data size (used in e.g. ContentResolver.insert) is limited to
-        // 512K, so we want to make sure one identicon occupies less than that.
-        for (int i = 10; i <= 100; i += 10) {
-            if (bytes.length <= 512000)
-                break;
-            stream = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100 - i, stream);
-            bytes = stream.toByteArray();
-        }
         try {
             stream.close();
         } catch (IOException e) {
