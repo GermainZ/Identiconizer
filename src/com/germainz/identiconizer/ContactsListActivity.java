@@ -193,10 +193,9 @@ public class ContactsListActivity extends ListActivity {
             final ImageView contactImage = (ImageView) view.findViewById(R.id.image);
             int photoThumbnailURIIndex = cursor.getColumnIndexOrThrow(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
             String photoThumbnailString = cursor.getString(photoThumbnailURIIndex);
-            if (photoThumbnailString == null) {
-                contactImage.setImageResource(R.drawable.ic_identicons_style_retro);
+            contactImage.setImageResource(R.drawable.ic_identicons_style_retro);
+            if (photoThumbnailString == null)
                 return;
-            }
 
             final Uri photoThumbnailURI = Uri.parse(photoThumbnailString);
             new Thread(new Runnable() {
