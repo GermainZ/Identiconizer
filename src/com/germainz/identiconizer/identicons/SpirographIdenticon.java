@@ -34,7 +34,7 @@ public class SpirographIdenticon extends Identicon {
         if (hash.length != 16)
             return null;
 
-        final int size = DEFAULT_SIZE;
+        final int size = SIZE;
         final float sizeDiv2 = size / 2f;
         float innerRadius = sizeDiv2 / 2f;
         float outerRadius = innerRadius / 2 + 1;
@@ -43,15 +43,15 @@ public class SpirographIdenticon extends Identicon {
         float point3 = (0.5f - (float)hash[2] / 255f) * (size - (innerRadius + outerRadius));
 
         int color1 = Color.rgb(hash[15], hash[14], hash[13]);
-        if (getColorDistance(color1, mBackgroundColor) <= 32.0) {
+        if (getColorDistance(color1, BG_COLOR) <= 32.0) {
             color1 = getComplementaryColor(color1);
         }
         int color2 = Color.rgb(hash[12], hash[11], hash[10]);
-        if (getColorDistance(color2, mBackgroundColor) <= 32.0) {
+        if (getColorDistance(color2, BG_COLOR) <= 32.0) {
             color2 = getComplementaryColor(color2);
         }
         int color3 = Color.rgb(hash[9], hash[8], hash[7]);
-        if (getColorDistance(color3, mBackgroundColor) <= 32.0) {
+        if (getColorDistance(color3, BG_COLOR) <= 32.0) {
             color3 = getComplementaryColor(color3);
         }
 
@@ -91,7 +91,7 @@ public class SpirographIdenticon extends Identicon {
 
         Bitmap bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
-        canvas.drawColor(mBackgroundColor);
+        canvas.drawColor(BG_COLOR);
         Paint p = new Paint();
         p.setStyle(Paint.Style.STROKE);
         p.setAntiAlias(true);

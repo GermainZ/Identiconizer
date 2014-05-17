@@ -20,11 +20,6 @@ package com.germainz.identiconizer.identicons;
 import android.content.Context;
 
 import com.germainz.identiconizer.Config;
-import com.germainz.identiconizer.identicons.DotMatrixIdenticon;
-import com.germainz.identiconizer.identicons.Identicon;
-import com.germainz.identiconizer.identicons.NineBlockIdenticon;
-import com.germainz.identiconizer.identicons.RetroIdenticon;
-import com.germainz.identiconizer.identicons.SpirographIdenticon;
 
 /**
  * A factory to instantiate an identicon based on the type
@@ -38,11 +33,15 @@ public class IdenticonFactory {
 
     /**
      * Get the appropriate identicon class based on the type passed in
+     *
      * @param type
+     * @param size
+     * @param bgColor
      * @return
      */
-    public static Identicon makeIdenticon(int type, int size) {
-        Identicon.DEFAULT_SIZE = size;
+    public static Identicon makeIdenticon(int type, int size, int bgColor) {
+        Identicon.SIZE = size;
+        Identicon.BG_COLOR = bgColor;
         switch (type) {
             case IDENTICON_STYLE_RETRO:
                 return new RetroIdenticon();
@@ -60,12 +59,13 @@ public class IdenticonFactory {
     /**
      * Get the appropriate identicon class by looking up the user selected
      * setting.
+     *
      * @param context
      * @return
      */
     public static Identicon makeIdenticon(Context context) {
         Config config = Config.getInstance(context);
-        return makeIdenticon(config.getIdenticonStyle(), config.getIdenticonSize());
+        return makeIdenticon(config.getIdenticonStyle(), config.getIdenticonSize(), config.getIdenticonBgColor());
     }
 }
 

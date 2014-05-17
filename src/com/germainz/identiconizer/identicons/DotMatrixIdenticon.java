@@ -29,15 +29,15 @@ public class DotMatrixIdenticon extends Identicon {
         if (hash.length < 16)
             return null;
 
-        Bitmap bmp = Bitmap.createBitmap(DEFAULT_SIZE, DEFAULT_SIZE, Bitmap.Config.ARGB_8888);
+        Bitmap bmp = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
-        canvas.drawColor(mBackgroundColor);
+        canvas.drawColor(BG_COLOR);
 
         int blue = (hash[13] & 0x01f) << 3;
         int green = (hash[14] & 0x01f) << 3;
         int red = (hash[15] & 0x01f) << 3;
         int color = Color.rgb(red, green, blue);
-        if (getColorDistance(color, mBackgroundColor) <= 64.0) {
+        if (getColorDistance(color, BG_COLOR) <= 64.0) {
             color = getComplementaryColor(color);
         }
 
@@ -54,7 +54,7 @@ public class DotMatrixIdenticon extends Identicon {
                 } else {
                     radius = (hash[index/2] >> 4) & 0x0F;
                 }
-                canvas.drawCircle(x * DEFAULT_SIZE / 5 + DEFAULT_SIZE / 10, y * DEFAULT_SIZE / 5 + DEFAULT_SIZE / 10, radius, p);
+                canvas.drawCircle(x * SIZE / 5 + SIZE / 10, y * SIZE / 5 + SIZE / 10, radius, p);
             }
         }
         return bmp;

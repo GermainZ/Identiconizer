@@ -32,8 +32,8 @@ public abstract class Identicon {
     public static final String DEFAULT_IDENTICON_SALT =
             "zG~v(+&>fLX|!#9D*BTj*#K>amB&TUB}T/jBOQih|Sg8}@N-^Rk|?VEXI,9EQPH]";
 
-    public static int DEFAULT_SIZE = 96;
-    protected int mBackgroundColor = 0xFFDDDDDD;
+    public static int SIZE = 96;
+    public static int BG_COLOR = 0xFFDDDDDD;
 
     /**
      * Generates an identicon bitmap using the provided hash

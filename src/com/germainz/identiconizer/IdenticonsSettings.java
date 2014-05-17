@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -31,12 +32,21 @@ import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.ContactsContract;
 import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.germainz.identiconizer.services.ContactsObserverService;
 import com.germainz.identiconizer.services.IdenticonCreationService;
 import com.germainz.identiconizer.services.IdenticonRemovalService;
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SaturationBar;
+import com.larswerkman.holocolorpicker.ValueBar;
 
 public class IdenticonsSettings extends PreferenceActivity implements OnPreferenceChangeListener {
     private SwitchPreference mEnabledPref;
@@ -85,7 +95,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
         });
 
         Preference contactsListPref = findPreference(Config.PREF_CONTACTS_LIST);
-        contactsListPref .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        contactsListPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(IdenticonsSettings.this, ContactsListActivity.class));
@@ -125,6 +135,71 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                         })
                         .setNegativeButton(R.string.dialog_cancel, null)
                         .create().show();
+                return true;
+            }
+        });
+
+        final Preference bgColorPref = findPreference(Config.PREF_BG_COLOR);
+        bgColorPref.setSummary(colorIntToRGB(mConfig.getIdenticonBgColor()));
+        bgColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                LayoutInflater inflater = IdenticonsSettings.this.getLayoutInflater();
+                View colorPickerView = inflater.inflate(R.layout.color_picker, (ViewGroup) findViewById(R.id.color_picker_root));
+
+                final ColorPicker colorPicker = (ColorPicker) colorPickerView.findViewById(R.id.picker);
+                SaturationBar saturationBar = (SaturationBar) colorPickerView.findViewById(R.id.saturationbar);
+                ValueBar valueBar = (ValueBar) colorPickerView.findViewById(R.id.valuebar);
+                final OpacityBar opacityBar = (OpacityBar) colorPickerView.findViewById(R.id.opacitybar);
+                final TextView valueTextView = (TextView) colorPickerView.findViewById(R.id.value);
+                Button applyButton = (Button) colorPickerView.findViewById(R.id.apply_value);
+
+                colorPicker.addSaturationBar(saturationBar);
+                colorPicker.addValueBar(valueBar);
+                colorPicker.addOpacityBar(opacityBar);
+
+                int savedColor = mConfig.getIdenticonBgColor();
+                colorPicker.setColor(savedColor);
+                valueTextView.setText(colorIntToRGB(mConfig.getIdenticonBgColor()));
+
+                colorPicker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
+                    @Override
+                    public void onColorChanged(int color) {
+                        valueTextView.setText(colorIntToRGB(color));
+                    }
+                });
+
+                applyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String value = "#" + valueTextView.getText().toString();
+                        try {
+                            int color = Color.parseColor(value);
+                            colorPicker.setColor(color);
+                        } catch (IllegalArgumentException e) {
+                            Toast.makeText(IdenticonsSettings.this, getString(R.string.invalid_color), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                new AlertDialog.Builder(IdenticonsSettings.this)
+                        .setView(colorPickerView)
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        })
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                int color = colorPicker.getColor();
+                                mConfig.setIdenticonBgColor(color);
+                                bgColorPref.setSummary(colorIntToRGB(color));
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .show();
                 return true;
             }
         });
@@ -189,6 +264,10 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
         } finally {
             c.close();
         }
+    }
+
+    public String colorIntToRGB(int color) {
+        return String.format("%08X", (0xFFFFFFFF & color));
     }
 
 }

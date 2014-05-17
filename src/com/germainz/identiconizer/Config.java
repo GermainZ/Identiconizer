@@ -31,6 +31,7 @@ public class Config {
     public static final String PREF_ENABLED = "identicons_enabled";
     public static final String PREF_STYLE = "identicons_style";
     public static final String PREF_SIZE = "identicons_size";
+    public static final String PREF_BG_COLOR = "identicons_bg_color";
     public static final String PREF_CREATE = "identicons_create";
     public static final String PREF_REMOVE = "identicons_remove";
     public static final String PREF_CONTACTS_LIST = "identicons_contacts_list";
@@ -73,6 +74,10 @@ public class Config {
         return Integer.parseInt(getString(PREF_SIZE, "96"));
     }
 
+    public int getIdenticonBgColor() {
+        return getInt(PREF_BG_COLOR, 0xDDFFFFFF);
+    }
+
     public int getMaxContactID() {
         return getInt(PREF_MAX_CONTACT_ID, 0);
     }
@@ -87,6 +92,10 @@ public class Config {
 
     public void setIdenticonSize(int size) {
         mPreferences.edit().putString(PREF_SIZE, Integer.toString(size)).commit();
+    }
+
+    public void setIdenticonBgColor(int color) {
+        mPreferences.edit().putInt(PREF_BG_COLOR, color).commit();
     }
 
     public void setMaxContactID(int id) {

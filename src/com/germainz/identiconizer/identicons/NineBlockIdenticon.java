@@ -76,7 +76,7 @@ public class NineBlockIdenticon extends Identicon {
      */
     @Override
     public Bitmap generateIdenticonBitmap(byte[] hash) {
-        return render(new BigInteger(1, hash), DEFAULT_SIZE);
+        return render(new BigInteger(1, hash), SIZE);
     }
 
     /**
@@ -194,16 +194,16 @@ public class NineBlockIdenticon extends Identicon {
         // shape color and background color are too similar (measured by color
         // distance).
         int fillColor = 0;
-        if (getColorDistance(strokeColor, mBackgroundColor) < 32.0f)
+        if (getColorDistance(strokeColor, BG_COLOR) < 32.0f)
             strokeColor = getComplementaryColor(strokeColor);
 
         // -------------------------------------------------
         // RENDER
         //
 
-        Bitmap bmp = Bitmap.createBitmap(DEFAULT_SIZE, DEFAULT_SIZE, Bitmap.Config.ARGB_8888);
+        Bitmap bmp = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
-        canvas.drawColor(mBackgroundColor);
+        canvas.drawColor(BG_COLOR);
         float blockSize = size / 3.0f;
         float blockSize2 = blockSize * 2.0f;
 

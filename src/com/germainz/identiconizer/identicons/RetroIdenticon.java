@@ -35,11 +35,11 @@ public class RetroIdenticon extends Identicon {
         if (hash.length != 16)
             return null;
 
-        Bitmap bmp = Bitmap.createBitmap(DEFAULT_SIZE, DEFAULT_SIZE, Bitmap.Config.ARGB_8888);
+        Bitmap bmp = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
-        canvas.drawColor(mBackgroundColor);
+        canvas.drawColor(BG_COLOR);
         int color = generateColor(hash);
-        if (getColorDistance(color, mBackgroundColor) <= 64.0) {
+        if (getColorDistance(color, BG_COLOR) <= 64.0) {
             color = getComplementaryColor(color);
         }
         Paint p = new Paint();
@@ -49,9 +49,9 @@ public class RetroIdenticon extends Identicon {
             for (int x = 0; x < 3; x++) {
                 final int index = y * 3 + x;
                 if (isOddParity(hash[index])) {
-                    drawSquare(canvas, x, y, DEFAULT_SIZE / 5, p);
-                    if (x == 0) drawSquare(canvas, 4, y, DEFAULT_SIZE / 5, p);
-                    if (x == 1) drawSquare(canvas, 3, y, DEFAULT_SIZE / 5, p);
+                    drawSquare(canvas, x, y, SIZE / 5, p);
+                    if (x == 0) drawSquare(canvas, 4, y, SIZE / 5, p);
+                    if (x == 1) drawSquare(canvas, 3, y, SIZE / 5, p);
                 }
             }
         }

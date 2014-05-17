@@ -66,14 +66,29 @@
     <string name="button_select_all">Select all</string>
     <string name="button_deselect_all">Deselect all</string>
 
+    <string name="identicons_bg_color_title">Identicons Background Color</string>
+    <string name="identicons_bg_color_summary">Choose the background color for generated
+        identicons
+    </string>
+    <string name="saturation">Saturation</string>
+    <string name="value">Value</string>
+    <string name="opacity">Opacity</string>
+    <string name="hex">Hex Color</string>
+    <string name="apply">Apply</string>
+    <string name="invalid_color">Invalid Color</string>
+
     <string name="about">• Identiconizer! by GermainZ. Click
         <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>
         for the support thread.\n•
         This application uses code and resources from the
         <a href="http://chameleonos.org">ChameleonOS Open Source Project</a>.\n•
-        The <a href="http://forum.xda-developers.com/showthread.php?t=1574401">Xposed Bridge
-            API</a>, by rovo89 and Tungstwenty, is also used.\n•
-        Identiconizer!, the ChameleonOS Open Source Project and the Xposed Framework are all
+        Used libraries:\n\t•
+        <a href="http://forum.xda-developers.com/showthread.php?t=1574401">Xposed Bridge
+            API</a>, by rovo89 and Tungstwenty.\n\t•
+        <a href="https://github.com/LarsWerkman/HoloColorPicker">Holo ColorPicker</a>,
+        by Lars Werkman.\n•
+        Identiconizer!, the ChameleonOS Open Source Project, Holo ColorPicker and the Xposed
+        Framework are all
         licensed under the <a href="http://apache.org/licenses/LICENSE-2.0">Apache License, Version
             2.0</a>.
     </string>
