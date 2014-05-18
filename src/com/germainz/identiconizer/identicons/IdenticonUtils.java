@@ -21,17 +21,34 @@ import java.util.Arrays;
 
 public class IdenticonUtils {
 
-    private static final byte[] PNG_HEADER = new byte[] { (byte) 137, (byte) 80, (byte) 78,
-            (byte) 71, (byte) 13, (byte) 10, (byte) 26, (byte) 10 };
+    private static final byte[] JPG_HEADER = new byte[]{(byte) 0xFF, (byte) 0xD8};
+    private static final byte[] PNG_HEADER = new byte[]{(byte) 137, (byte) 80, (byte) 78,
+            (byte) 71, (byte) 13, (byte) 10, (byte) 26, (byte) 10};
+    private static final int JPG_FORMAT = 0;
+    private static final int PNG_FORMAT = 1;
+    private static final int OTHER_FORMAT = 2;
 
     public static boolean isIdenticon(byte[] data) {
-        if (data == null || !isPngFormat(data))
+        int format = getDataFormat(data);
+        if (data == null || format == OTHER_FORMAT)
             return false;
 
-        byte[] tag = Arrays.copyOfRange(data, data.length - (Identicon.IDENTICON_MARKER.length() + 1), data.length - 1);
+        int start, end;
+        String charSet;
+        if (format == JPG_FORMAT) {
+            start = data.length - 18;
+            end = data.length -2;
+            charSet = "US-ASCII";
+        } else {
+            start = data.length - (Identicon.IDENTICON_MARKER.length() + 1);
+            end = data.length - 1;
+            charSet = "ISO-8859-1";
+        }
+        byte[] tag = Arrays.copyOfRange(data, start, end);
+
         String tagString;
         try {
-            tagString = new String(tag, "ISO-8859-1");
+            tagString = new String(tag, charSet);
         } catch (UnsupportedEncodingException e) {
             return false;
         }
@@ -39,15 +56,31 @@ public class IdenticonUtils {
         return Identicon.IDENTICON_MARKER.equals(tagString);
     }
 
-    private static boolean isPngFormat(byte[] data) {
-        if (data.length < PNG_HEADER.length)
-            return false;
-
-        for (int i = 0; i < PNG_HEADER.length; i++) {
-            if (data[i] != PNG_HEADER[i])
-                return false;
+    private static int getDataFormat(byte[] data) {
+        boolean isPng = true;
+        if (data.length < PNG_HEADER.length) {
+            isPng = false;
+        } else {
+            for (int i = 0; i < PNG_HEADER.length; i++) {
+                if (data[i] != PNG_HEADER[i])
+                    isPng = false;
+            }
         }
+        if (isPng)
+            return PNG_FORMAT;
 
-        return true;
+        boolean isJpg = true;
+        if (data.length < JPG_HEADER.length) {
+            isJpg = false;
+        } else {
+            for (int i = 0; i < JPG_HEADER.length; i++) {
+                if (data[i] != JPG_HEADER[i])
+                    isJpg = false;
+            }
+        }
+        if (isJpg)
+            return JPG_FORMAT;
+
+        return OTHER_FORMAT;
     }
 }
