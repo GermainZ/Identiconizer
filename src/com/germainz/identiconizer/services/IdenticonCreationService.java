@@ -172,12 +172,14 @@ public class IdenticonCreationService extends IntentService {
             values.put(ContactsContract.Data.IS_SUPER_PRIMARY, 1);
             values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, bytes);
             values.put("skip_processing", "skip_processing");
-            // We're not using applyBatch because of the 512K limit of the transaction buffer,
+            // We're not using applyBatch because of the 1024K limit of the transaction buffer,
             // which isn't enough when we're using a large identicon size and certain styles (e.g.
             // the Spirograph style, which occupies roughly that much on its own when the size is
             // set to 720x720.)
-            if (getContentResolver().update(ContactsContract.Data.CONTENT_URI, values, selection, selectionArgs) != 1)
-                Log.d(TAG, "(1) Couldn't update raw_contact_id " + Long.toString(personId));
+            if (getContentResolver().update(ContactsContract.Data.CONTENT_URI, values, selection, selectionArgs) != 1) {
+                Log.d(TAG, "Couldn't update image for raw_contact_id " + Long.toString(personId));
+                Log.d(TAG, "Image size: " + bytes.length + " bytes");
+            }
         } else {
             values.put(ContactsContract.Data.RAW_CONTACT_ID, personId);
             values.put(ContactsContract.Data.IS_PRIMARY, 1);
@@ -185,8 +187,10 @@ public class IdenticonCreationService extends IntentService {
             values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, bytes);
             values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
             values.put("skip_processing", "skip_processing");
-            if (getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values) == null)
-                Log.d(TAG, "(2) Couldn't update raw_contact_id " + Long.toString(personId));
+            if (getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values) == null) {
+                Log.d(TAG, "Couldn't insert image for raw_contact_id " + Long.toString(personId));
+                Log.d(TAG, "Image size: " + bytes.length + " bytes");
+            }
         }
     }
 
