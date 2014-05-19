@@ -22,21 +22,30 @@ import android.os.Parcelable;
 public class ContactInfo implements Parcelable {
     public int nameRawContactId;
     public String contactName;
+    public int contactPhotoSize;
 
     public ContactInfo(int id, String name) {
         nameRawContactId = id;
         contactName = name;
     }
 
+    public ContactInfo(int id, String name, int photoSize) {
+        nameRawContactId = id;
+        contactName = name;
+        contactPhotoSize = photoSize;
+    }
+
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(nameRawContactId);
         out.writeString(contactName);
+        out.writeInt(contactPhotoSize);
     }
 
     public ContactInfo(Parcel in) {
         nameRawContactId = in.readInt();
         contactName = in.readString();
+        contactPhotoSize = in.readInt();
     }
 
     public static final Parcelable.Creator<ContactInfo> CREATOR = new Parcelable.Creator<ContactInfo>() {

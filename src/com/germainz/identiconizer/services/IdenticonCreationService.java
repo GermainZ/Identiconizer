@@ -28,11 +28,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.germainz.identiconizer.ContactInfo;
+import com.germainz.identiconizer.ErrorsListActivity;
 import com.germainz.identiconizer.identicons.IdenticonFactory;
 import com.germainz.identiconizer.identicons.IdenticonUtils;
 import com.germainz.identiconizer.IdenticonsSettings;
@@ -44,6 +45,10 @@ import java.util.ArrayList;
 public class IdenticonCreationService extends IntentService {
     private static final String TAG = "IdenticonCreationService";
     private static final int SERVICE_NOTIFICATION_ID = 8675309;
+    private static final int ERROR_NOTIFICATION_ID = 8675310;
+
+    private ArrayList<ContactInfo> mInsertErrors = new ArrayList<>();
+    private ArrayList<ContactInfo> mUpdateErrors = new ArrayList<>();
 
     public IdenticonCreationService() {
         super(TAG);
@@ -66,6 +71,8 @@ public class IdenticonCreationService extends IntentService {
             boolean updateExisting = intent.getBooleanExtra("updateExisting", true);
             processContacts(updateExisting);
         }
+        if (mUpdateErrors.size() > 0 || mInsertErrors.size() > 0)
+            createNotificationForError();
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("CONTACTS_UPDATED"));
         getContentResolver().notifyChange(ContactsContract.Data.CONTENT_URI, null);
         stopForeground(true);
@@ -74,9 +81,9 @@ public class IdenticonCreationService extends IntentService {
     private void processContacts(boolean updateExisting) {
         Cursor cursor = getContacts();
         while (cursor.moveToNext()) {
-            final long rawContactId = cursor.getLong(0);
+            final int rawContactId = cursor.getInt(0);
             final String name = cursor.getString(1);
-            final long photoId = cursor.getLong(2);
+            final int photoId = cursor.getInt(2);
             if (!TextUtils.isEmpty(name)) {
                 final byte[] photo = getContactPhotoBlob(photoId);
                 if (photoId <= 0 || photo == null || (updateExisting && IdenticonUtils.isIdenticon(photo))) {
@@ -125,7 +132,7 @@ public class IdenticonCreationService extends IntentService {
         return blob;
     }
 
-    private void generateIdenticon(long contactId, String name) {
+    private void generateIdenticon(int contactId, String name) {
         if (!TextUtils.isEmpty(name)) {
             updateNotification(getString(R.string.identicons_creation_service_running_title),
                     String.format(getString(R.string.identicons_creation_service_contact_summary),
@@ -133,11 +140,11 @@ public class IdenticonCreationService extends IntentService {
             );
             final Identicon identicon = IdenticonFactory.makeIdenticon(this);
             final byte[] identiconImage = identicon.generateIdenticonByteArray(name);
-            setContactPhoto(getContentResolver(), identiconImage, contactId);
+            setContactPhoto(getContentResolver(), identiconImage, contactId, name);
         }
     }
 
-    private void setContactPhoto(ContentResolver resolver, byte[] bytes, long personId) {
+    private void setContactPhoto(ContentResolver resolver, byte[] bytes, int personId, String name) {
         ContentValues values = new ContentValues();
         int photoRow = -1;
         String where = ContactsContract.Data.RAW_CONTACT_ID + " == "
@@ -172,10 +179,8 @@ public class IdenticonCreationService extends IntentService {
             // which isn't enough when we're using a large identicon size and certain styles (e.g.
             // the Spirograph style, which occupies roughly that much on its own when the size is
             // set to 720x720.)
-            if (getContentResolver().update(ContactsContract.Data.CONTENT_URI, values, selection, selectionArgs) != 1) {
-                Log.d(TAG, "Couldn't update image for raw_contact_id " + Long.toString(personId));
-                Log.d(TAG, "Image size: " + bytes.length + " bytes");
-            }
+            if (getContentResolver().update(ContactsContract.Data.CONTENT_URI, values, selection, selectionArgs) != 1)
+                mUpdateErrors.add(new ContactInfo(personId, name, bytes.length));
         } else {
             values.put(ContactsContract.Data.RAW_CONTACT_ID, personId);
             values.put(ContactsContract.Data.IS_PRIMARY, 1);
@@ -183,10 +188,8 @@ public class IdenticonCreationService extends IntentService {
             values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, bytes);
             values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
             values.put("skip_processing", "skip_processing");
-            if (getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values) == null) {
-                Log.d(TAG, "Couldn't insert image for raw_contact_id " + Long.toString(personId));
-                Log.d(TAG, "Image size: " + bytes.length + " bytes");
-            }
+            if (getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values) == null)
+                mInsertErrors.add(new ContactInfo(personId, name, bytes.length));
         }
     }
 
@@ -222,5 +225,23 @@ public class IdenticonCreationService extends IntentService {
                 .setContentIntent(contentIntent)
                 .getNotification();
         nm.notify(SERVICE_NOTIFICATION_ID, notice);
+    }
+
+    private void createNotificationForError() {
+        Intent intent = new Intent(this, ErrorsListActivity.class);
+        intent.putParcelableArrayListExtra("insertErrors", mInsertErrors);
+        intent.putParcelableArrayListExtra("updateErrors", mUpdateErrors);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        String contentText = getString(R.string.sql_error_notification_text, mInsertErrors.size() + mUpdateErrors.size());
+        Notification notice = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_settings_identicons)
+                .setContentTitle(getString(R.string.sql_error_notification_title))
+                .setContentText(contentText)
+                .setContentIntent(contentIntent)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
+                .setAutoCancel(true)
+                .build();
+        NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(ERROR_NOTIFICATION_ID, notice);
     }
 }

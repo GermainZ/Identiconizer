@@ -77,6 +77,18 @@
     <string name="apply">Apply</string>
     <string name="invalid_color">Invalid Color</string>
 
+    <string name="sql_error_notification_title">Identiconizer! error</string>
+    <string name="sql_error_notification_text">Failed to set contact photo for %1$d contacts. Tap
+        for details.
+    </string>
+    <string name="sql_error_explanation">Errors usually occur if the image size is larger than 1M.
+        Try choosing a smaller identicon size or a different style for these contacts.
+    </string>
+    <string name="sql_error">%1$s error: %2$s (photo size: %3$dK; name_raw_contact_id: %4$d)
+    </string>
+    <string name="sql_insert">Insert</string>
+    <string name="sql_update">Update</string>
+
     <string name="about">• Identiconizer! by GermainZ. Click
         <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>
         for the support thread.\n•
