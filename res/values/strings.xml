@@ -89,6 +89,9 @@
     <string name="sql_insert">Insert</string>
     <string name="sql_update">Update</string>
 
+    <string name="xposed_error_title">Identiconizer! error</string>
+    <string name="xposed_error_text">Xposed module error. Disable Identiconizer! in the Xposed Installer and reboot.</string>
+
     <string name="about">• Identiconizer! by GermainZ. Click
         <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>
         for the support thread.\n•
