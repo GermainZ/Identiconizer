@@ -19,12 +19,24 @@
 -->
 <resources>
 
+    <!-- General strings -->
     <string name="app_name">Identiconizer!</string>
+    <string name="dialog_ok">Done</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="button_select_all">Select all</string>
+    <string name="button_deselect_all">Deselect all</string>
 
-    <string name="identicons_title">@string/app_name</string>
+    <!-- Xposed & XposedMod.java -->
     <string name="xposed_description">Optional Xposed module. Used instead of the service to create
         identicons for new contacts.
     </string>
+    <string name="xposed_error_title">Identiconizer! Xposed error</string>
+    <string name="xposed_error_text">Xposed module error. Disable Identiconizer! in the Xposed
+        Installer and reboot.
+    </string>
+
+    <!-- Main activity (IdenticonsSettings.java) -->
+    <string name="identicons_title">@string/app_name</string>
     <string name="identicons_enabled_title">Identicons</string>
     <string name="identicons_enabled_summary">Use identicon as default contact picture when creating
         new contacts
@@ -35,9 +47,6 @@
     <string name="identicons_create_summary">Create identicons for existing contacts without a
         contact photo and update set identicons
     </string>
-    <string name="identicons_creation_service_running_title">Creating identicons</string>
-    <string name="identicons_creation_service_running_summary"></string>
-    <string name="identicons_creation_service_contact_summary">Processing %s</string>
     <string name="identicons_remove_title">Remove identicons</string>
     <string name="identicons_remove_summary">Remove identicon from contacts that have one set
     </string>
@@ -45,31 +54,20 @@
     <string name="identicons_contacts_list_summary">View contacts list and manage identicons
         for wanted contacts
     </string>
-    <string name="identicons_remove_service_running_title">Removing identicons</string>
-    <string name="identicons_remove_service_running_summary"></string>
-    <string name="identicons_remove_service_contact_summary">Processing photo %1$d/%2$d</string>
-    <string name="identicons_remove_service_contact_summary_finishing">Tying up loose ends…</string>
     <string name="identicons_size_title">Identicon Size</string>
     <string name="identicons_size_summary">Contact photo size</string>
     <string name="about_title">About Identiconizer!</string>
     <string name="about_summary">Author, licenses, and support information</string>
-
+    <!-- Shown in the "Identicon style" popup -->
     <string name="identicons_style_retro">Retro</string>
     <string name="identicons_style_contemporary">Contemporary</string>
     <string name="identicons_style_spirograph">Spirograph</string>
     <string name="identicons_style_dotmatrix">Dot matrix</string>
-
-    <string name="dialog_ok">Done</string>
-    <string name="dialog_cancel">Cancel</string>
-    <string name="button_add">Create identicons for selected contacts</string>
-    <string name="button_clear">Remove contact photos for selected contacts</string>
-    <string name="button_select_all">Select all</string>
-    <string name="button_deselect_all">Deselect all</string>
-
     <string name="identicons_bg_color_title">Identicons Background Color</string>
     <string name="identicons_bg_color_summary">Choose the background color for generated
         identicons
     </string>
+    <!-- Used in the Holo ColorPicker dialog -->
     <string name="saturation">Saturation</string>
     <string name="value">Value</string>
     <string name="opacity">Opacity</string>
@@ -77,6 +75,22 @@
     <string name="apply">Apply</string>
     <string name="invalid_color">Invalid Color</string>
 
+    <!-- IdenticonCreationService.java -->
+    <string name="identicons_creation_service_running_title">Creating identicons</string>
+    <string name="identicons_creation_service_running_summary"></string>
+    <string name="identicons_creation_service_contact_summary">Processing %s</string>
+
+    <!-- IdenticonRemovalService.java -->
+    <string name="identicons_remove_service_running_title">Removing identicons</string>
+    <string name="identicons_remove_service_running_summary"></string>
+    <string name="identicons_remove_service_contact_summary">Processing photo %1$d/%2$d</string>
+    <string name="identicons_remove_service_contact_summary_finishing">Tying up loose ends…</string>
+
+    <!-- ContactsListActivity.java -->
+    <string name="button_add">Create identicons for selected contacts</string>
+    <string name="button_clear">Remove contact photos for selected contacts</string>
+
+    <!-- Strings about SQL errors. Used in IdenticonCreationService.java & ErrorsListActivity.java -->
     <string name="sql_error_notification_title">Identiconizer! error</string>
     <string name="sql_error_notification_text">Failed to set contact photo for %1$d contacts. Tap
         for details.
@@ -89,9 +103,7 @@
     <string name="sql_insert">Insert</string>
     <string name="sql_update">Update</string>
 
-    <string name="xposed_error_title">Identiconizer! error</string>
-    <string name="xposed_error_text">Xposed module error. Disable Identiconizer! in the Xposed Installer and reboot.</string>
-
+    <!-- About dialog (IdenticonSettings.java) -->
     <string name="about">• Identiconizer! by GermainZ. Click
         <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>
         for the support thread.\n•
