@@ -133,11 +133,7 @@ public class IdenticonCreationService extends IntentService {
             );
             final Identicon identicon = IdenticonFactory.makeIdenticon(this);
             final byte[] identiconImage = identicon.generateIdenticonByteArray(name);
-            if (identicon == null) {
-                Log.e(TAG, "generateIdenticon() - identicon for " + name + " is null!");
-            } else {
-                setContactPhoto(getContentResolver(), identiconImage, contactId);
-            }
+            setContactPhoto(getContentResolver(), identiconImage, contactId);
         }
     }
 
