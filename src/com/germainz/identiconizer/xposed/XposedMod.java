@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 GermainZ@xda-developers.com
+ * Copyright (C) 2013-2014 GermainZ@xda-developers.com
  * Portions Copyright (C) 2013 The ChameleonOS Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

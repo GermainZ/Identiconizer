@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 GermainZ@xda-developers.com
+ * Copyright (C) 2013-2014 GermainZ@xda-developers.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
