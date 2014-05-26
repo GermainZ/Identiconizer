@@ -40,6 +40,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.germainz.identiconizer.identicons.IdenticonFactory;
 import com.germainz.identiconizer.services.ContactsObserverService;
 import com.germainz.identiconizer.services.IdenticonCreationService;
 import com.germainz.identiconizer.services.IdenticonRemovalService;
@@ -51,6 +52,7 @@ import com.larswerkman.holocolorpicker.ValueBar;
 public class IdenticonsSettings extends PreferenceActivity implements OnPreferenceChangeListener {
     private SwitchPreference mEnabledPref;
     private ImageListPreference mStylePref;
+    private Preference mBgColorPref;
 
     private CharSequence mPreviousTitle;
 
@@ -103,10 +105,10 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             }
         });
 
-        final Preference identiconsSizePref = findPreference(Config.PREF_SIZE);
+        final Preference sizePref = findPreference(Config.PREF_SIZE);
         final int identiconSize = mConfig.getIdenticonSize();
-        identiconsSizePref.setSummary(identiconSize + " × " + identiconSize);
-        identiconsSizePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        sizePref.setSummary(identiconSize + " × " + identiconSize);
+        sizePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 final NumberPicker npView = new NumberPicker(IdenticonsSettings.this);
@@ -130,7 +132,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 int value = npView.getValue() * step + minValue;
                                 mConfig.setIdenticonSize(value);
-                                identiconsSizePref.setSummary(value + " × " + value);
+                                sizePref.setSummary(value + " × " + value);
                             }
                         })
                         .setNegativeButton(R.string.dialog_cancel, null)
@@ -139,9 +141,11 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             }
         });
 
-        final Preference bgColorPref = findPreference(Config.PREF_BG_COLOR);
-        bgColorPref.setSummary(colorIntToRGB(mConfig.getIdenticonBgColor()));
-        bgColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        mBgColorPref = findPreference(Config.PREF_BG_COLOR);
+        if (mConfig.getIdenticonStyle() == IdenticonFactory.IDENTICON_STYLE_GMAIL)
+            mBgColorPref.setEnabled(false);
+        mBgColorPref.setSummary(colorIntToRGB(mConfig.getIdenticonBgColor()));
+        mBgColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 LayoutInflater inflater = IdenticonsSettings.this.getLayoutInflater();
@@ -195,7 +199,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 int color = colorPicker.getColor();
                                 mConfig.setIdenticonBgColor(color);
-                                bgColorPref.setSummary(colorIntToRGB(color));
+                                mBgColorPref.setSummary(colorIntToRGB(color));
                                 dialogInterface.dismiss();
                             }
                         })
@@ -244,6 +248,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
         } else if (preference == mStylePref) {
             int style = Integer.valueOf((String) newValue);
             updateStyleSummary(style);
+            mBgColorPref.setEnabled(style != IdenticonFactory.IDENTICON_STYLE_GMAIL);
             return true;
         }
         return false;
