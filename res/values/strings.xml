@@ -63,6 +63,7 @@
     <string name="identicons_style_contemporary">Contemporary</string>
     <string name="identicons_style_spirograph">Spirograph</string>
     <string name="identicons_style_dotmatrix">Dot matrix</string>
+    <string name="identicons_style_gmail">Gmail</string>
     <string name="identicons_bg_color_title">Identicons Background Color</string>
     <string name="identicons_bg_color_summary">Choose the background color for generated
         identicons

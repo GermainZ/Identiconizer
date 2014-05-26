@@ -22,6 +22,7 @@
         <item>@string/identicons_style_contemporary</item>
         <item>@string/identicons_style_spirograph</item>
         <item>@string/identicons_style_dotmatrix</item>
+        <item>@string/identicons_style_gmail</item>
     </string-array>
 
     <string-array name="identicons_style_values" translatable="false">
@@ -29,6 +30,7 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </string-array>
 
     <array name="identicons_style_icons" translatable="false">
@@ -36,6 +38,7 @@
         <item>@drawable/ic_identicons_style_contemporary</item>
         <item>@drawable/ic_identicons_style_spirograph</item>
         <item>@drawable/ic_identicons_style_dotmatrix</item>
+        <item>@drawable/ic_identicons_style_gmail</item>
     </array>
 
 </resources>
