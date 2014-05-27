@@ -20,16 +20,21 @@ limitations under the License.
 INCLUDED LIBRARIES
 ==================
 
-* Android Support v4 Libraries:
-Copyright (c) 2005-2008, The Android Open Source Project
-Licensed under the Apache License, Version 2.0
+Android Support v4 Libraries:
+-----------------------------
+     Copyright (c) 2005-2008, The Android Open Source Project
+     Licensed under the Apache License, Version 2.0
 
-* Xposed Bridge API library:
-Copyright 2013 rovo89, Tungstwenty
-Licensed under the Apache License, Version 2.0
-https://github.com/rovo89/XposedBridge
+Xposed Bridge API library
+-------------------------
+<https://github.com/rovo89/XposedBridge>
 
-* Holo Color Picker library:
-Copyright 2012 Lars Werkman
-Licensed under the Apache License, Version 2.0
-https://github.com/LarsWerkman/HoloColorPicker
+     Copyright 2013 rovo89, Tungstwenty
+     Licensed under the Apache License, Version 2.0
+
+Holo Color Picker library
+-------------------------
+<https://github.com/LarsWerkman/HoloColorPicker>
+
+     Copyright 2012 Lars Werkman
+     Licensed under the Apache License, Version 2.0
