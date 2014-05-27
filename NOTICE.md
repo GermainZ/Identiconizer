@@ -2,6 +2,7 @@ LICENSE FOR THE MAIN PRODUCT
 ============================
 
 Original work Copyright (C) 2013 The ChameleonOS Open Source Project
+
 Modified work Copyright (C) 2013-2014 GermainZ@xda-developers.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
