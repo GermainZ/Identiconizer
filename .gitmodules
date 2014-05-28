@@ -1,0 +1,4 @@
+[submodule "external/HoloColorPicker"]
+    path = external/HoloColorPicker
+    url = git@github.com:LarsWerkman/HoloColorPicker.git
+    ignore = dirty

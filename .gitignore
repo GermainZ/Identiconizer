@@ -4,3 +4,6 @@ gen/
 out/
 *.apk
 *.iml
+build.xml
+local.properties
+proguard-project.txt
