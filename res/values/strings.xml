@@ -37,39 +37,34 @@
 
     <!-- Main activity (IdenticonsSettings.java) -->
     <string name="identicons_title">@string/app_name</string>
-    <string name="identicons_enabled_title">Identicons</string>
-    <string name="identicons_enabled_summary">Use identicon as default contact picture when creating
-        new contacts
-    </string>
-    <string name="identicons_style_title">Identicon style</string>
-    <string name="identicons_style_summary">Choose an identicon style to use</string>
+    <string name="identicons_enabled_title">Automatic identicons</string>
+    <string name="identicons_enabled_summary">Add identicons for new contacts</string>
+    <!-- Identicon Appearance -->
+    <string name="section_appearance">Identicons appearance</string>
+    <string name="identicons_style_title">Style</string>
+    <string name="identicons_size_title">Size</string>
+    <string name="identicons_bg_color_title">Background Color</string>
+    <!-- Manage Identicons -->
+    <string name="section_management">Manage</string>
     <string name="identicons_create_title">Create identicons</string>
-    <string name="identicons_create_summary">Create identicons for existing contacts without a
-        contact photo and update set identicons
-    </string>
+    <string name="identicons_create_summary">For contacts with an identicon or no photo</string>
     <string name="identicons_remove_title">Remove identicons</string>
-    <string name="identicons_remove_summary">Remove identicon from contacts that have one set
-    </string>
+    <string name="identicons_remove_summary">For contacts with an identicon</string>
     <string name="identicons_contacts_list_title">Contacts list</string>
-    <string name="identicons_contacts_list_summary">View contacts list and manage identicons
-        for wanted contacts
+    <string name="identicons_contacts_list_summary">Manage identicons for wanted contacts</string>
+    <!-- Other -->
+    <string name="section_other">Other</string>
+    <string name="identicons_contacts_ignore_visibility_title">Show all contacts</string>
+    <string name="identicons_contacts_ignore_visibility_summary">Ignore group visibility and custom
+        filters. Useful for DAVdroid users
     </string>
-    <string name="identicons_contacts_ignore_visibility_title">Ignore contact group visibility</string>
-    <string name="identicons_contacts_ignore_visibility_summary">Useful for DAVdroid users.</string>
-    <string name="identicons_size_title">Identicon Size</string>
-    <string name="identicons_size_summary">Contact photo size</string>
     <string name="about_title">About Identiconizer!</string>
-    <string name="about_summary">Author, licenses, and support information</string>
     <!-- Shown in the "Identicon style" popup -->
     <string name="identicons_style_retro">Retro</string>
     <string name="identicons_style_contemporary">Contemporary</string>
     <string name="identicons_style_spirograph">Spirograph</string>
     <string name="identicons_style_dotmatrix">Dot matrix</string>
     <string name="identicons_style_gmail">Gmail</string>
-    <string name="identicons_bg_color_title">Identicons Background Color</string>
-    <string name="identicons_bg_color_summary">Choose the background color for generated
-        identicons
-    </string>
     <!-- Used in the Holo ColorPicker dialog -->
     <string name="saturation">Saturation</string>
     <string name="value">Value</string>
@@ -106,21 +101,17 @@
     <string name="sql_insert">Insert</string>
     <string name="sql_update">Update</string>
 
-    <!-- About dialog (IdenticonSettings.java) -->
-    <string name="about">• Identiconizer! by GermainZ. Click
-        <a href="http://forum.xda-developers.com/showthread.php?t=2718943">here</a>
-        for the support thread.\n•
-        This application uses code and resources from the
-        <a href="http://chameleonos.org">ChameleonOS Open Source Project</a>.\n•
-        Used libraries:\n\t•
-        <a href="http://forum.xda-developers.com/showthread.php?t=1574401">Xposed Bridge
-            API</a>, by rovo89 and Tungstwenty.\n\t•
-        <a href="https://github.com/LarsWerkman/HoloColorPicker">Holo ColorPicker</a>,
-        by Lars Werkman.\n•
-        Identiconizer!, the ChameleonOS Open Source Project, Holo ColorPicker and the Xposed
-        Framework are all
-        licensed under the <a href="http://apache.org/licenses/LICENSE-2.0">Apache License, Version
-            2.0</a>.
-    </string>
+    <!-- About screen (IdenticonSettings.java) -->
+    <string name="about">About</string>
+    <string name="support_title">Support</string>
+    <string name="support_summary">Identiconizer! by GermainZ</string>
+    <string name="thanks">Thanks</string>
+    <string name="chameleonos_title">ChameleonOS Open Source Project</string>
+    <string name="chameleonos_summary">For code and resources used in this app</string>
+    <string name="used_libraries">Used libraries</string>
+    <string name="xposed_api_title">Xposed Bridge API</string>
+    <string name="xposed_api_summary">By rovo89 and Tungstwenty</string>
+    <string name="holo_colorpicker_title">Holo ColorPicker</string>
+    <string name="holo_colorpicker_summary">By Lars Werkman</string>
 
 </resources>

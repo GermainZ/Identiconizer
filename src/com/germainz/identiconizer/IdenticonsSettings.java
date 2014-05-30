@@ -208,19 +208,6 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             }
         });
 
-        Preference aboutPref = findPreference(Config.PREF_ABOUT);
-        aboutPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                AlertDialog alertDialog = new AlertDialog.Builder(IdenticonsSettings.this)
-                        .setMessage(R.string.about)
-                        .setPositiveButton(R.string.dialog_ok, null)
-                        .show();
-                TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
-                return true;
-            }
-        });
     }
 
     @Override

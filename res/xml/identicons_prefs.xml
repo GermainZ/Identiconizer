@@ -26,48 +26,100 @@
         android:summary="@string/identicons_enabled_summary"
         android:defaultValue="false"/>
 
-    <com.germainz.identiconizer.ImageListPreference
-        android:key="identicons_style"
-        android:title="@string/identicons_style_title"
-        android:summary="@string/identicons_style_summary"
-        android:entries="@array/identicons_style_entries"
-        android:entryValues="@array/identicons_style_values"
-        app:entryImages="@array/identicons_style_icons"
-        android:defaultValue="0"/>
+    <PreferenceCategory android:title="@string/section_appearance">
 
-    <Preference
-        android:key="identicons_bg_color"
-        android:title="@string/identicons_bg_color_title"
-        android:summary="@string/identicons_bg_color_summary"/>
+        <com.germainz.identiconizer.ImageListPreference
+            android:key="identicons_style"
+            android:title="@string/identicons_style_title"
+            android:entries="@array/identicons_style_entries"
+            android:entryValues="@array/identicons_style_values"
+            app:entryImages="@array/identicons_style_icons"
+            android:defaultValue="0"/>
 
-    <Preference
-        android:key="identicons_size"
-        android:title="@string/identicons_size_title"
-        android:summary="@string/identicons_size_summary"/>
+        <Preference
+            android:key="identicons_bg_color"
+            android:title="@string/identicons_bg_color_title"/>
 
-    <Preference
-        android:key="identicons_create"
-        android:title="@string/identicons_create_title"
-        android:summary="@string/identicons_create_summary"/>
+        <Preference
+            android:key="identicons_size"
+            android:title="@string/identicons_size_title"/>
 
-    <Preference
-        android:key="identicons_remove"
-        android:title="@string/identicons_remove_title"
-        android:summary="@string/identicons_remove_summary"/>
+    </PreferenceCategory>
 
-    <Preference
-        android:key="identicons_contacts_list"
-        android:title="@string/identicons_contacts_list_title"
-        android:summary="@string/identicons_contacts_list_summary"/>
+    <PreferenceCategory android:title="@string/section_management">
 
-    <CheckBoxPreference
-        android:key="identicons_contacts_ignore_visibility"
-        android:title="@string/identicons_contacts_ignore_visibility_title"
-        android:summary="@string/identicons_contacts_ignore_visibility_summary"/>
+        <Preference
+            android:key="identicons_create"
+            android:title="@string/identicons_create_title"
+            android:summary="@string/identicons_create_summary"/>
 
-    <Preference
-        android:key="about"
-        android:title="@string/about_title"
-        android:summary="@string/about_summary"/>
+        <Preference
+            android:key="identicons_remove"
+            android:title="@string/identicons_remove_title"
+            android:summary="@string/identicons_remove_summary"/>
+
+        <Preference
+            android:key="identicons_contacts_list"
+            android:title="@string/identicons_contacts_list_title"
+            android:summary="@string/identicons_contacts_list_summary"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/section_other">
+
+        <CheckBoxPreference
+            android:key="identicons_contacts_ignore_visibility"
+            android:title="@string/identicons_contacts_ignore_visibility_title"
+            android:summary="@string/identicons_contacts_ignore_visibility_summary"/>
+
+        <PreferenceScreen
+            android:key="@string/about"
+            android:title="@string/about_title">
+
+            <Preference
+                android:title="@string/support_title"
+                android:summary="@string/support_summary">
+                <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="http://forum.xda-developers.com/showthread.php?t=2718943"/>
+            </Preference>
+
+            <PreferenceCategory
+                android:title="@string/thanks">
+
+                <Preference
+                    android:title="@string/chameleonos_title"
+                    android:summary="@string/chameleonos_summary">
+                    <intent
+                        android:action="android.intent.action.VIEW"
+                        android:data="http://www.chameleonos.org/"/>
+                </Preference>
+
+            </PreferenceCategory>
+
+            <PreferenceCategory
+                android:title="@string/used_libraries">
+
+                <Preference
+                    android:title="@string/xposed_api_title"
+                    android:summary="@string/xposed_api_summary">
+                    <intent
+                        android:action="android.intent.action.VIEW"
+                        android:data="https://github.com/rovo89/XposedBridge"/>
+                </Preference>
+
+                <Preference
+                    android:title="@string/holo_colorpicker_title"
+                    android:summary="@string/holo_colorpicker_summary">
+                    <intent
+                        android:action="android.intent.action.VIEW"
+                        android:data="https://github.com/LarsWerkman/HoloColorPicker"/>
+                </Preference>
+
+            </PreferenceCategory>
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
