@@ -20,6 +20,7 @@ package com.germainz.identiconizer;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
@@ -33,11 +34,13 @@ import android.widget.ListAdapter;
 
 public class ImageListPreference extends ListPreference {
     private int[] mResourceIds = null;
+    private int mRadioDrawableId;
 
     /**
      * Constructor of the ImageListPreference. Initializes the custom images.
+     *
      * @param context application context.
-     * @param attrs custom xml attributes.
+     * @param attrs   custom xml attributes.
      */
     public ImageListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,11 +48,11 @@ public class ImageListPreference extends ListPreference {
                 R.styleable.ImageListPreference);
 
         String[] imageNames = context.getResources().getStringArray(
-                typedArray.getResourceId(typedArray.getIndexCount()-1, -1));
+                typedArray.getResourceId(typedArray.getIndexCount() - 1, -1));
 
         mResourceIds = new int[imageNames.length];
 
-        for (int i=0;i<imageNames.length;i++) {
+        for (int i = 0; i < imageNames.length; i++) {
             String imageName = imageNames[i].substring(
                     imageNames[i].lastIndexOf('/') + 1,
                     imageNames[i].lastIndexOf('.'));
@@ -59,6 +62,11 @@ public class ImageListPreference extends ListPreference {
         }
 
         typedArray.recycle();
+
+        // in order to use the holo themed radio button we must get the id
+        // from the system resources and then get the drawable for that id
+        // Because it uses reflection twice, we'll store this value for future use.
+        mRadioDrawableId = Resources.getSystem().getIdentifier("btn_radio_holo_dark", "drawable", "android");
     }
 
     /**
@@ -82,11 +90,12 @@ public class ImageListPreference extends ListPreference {
 
         /**
          * ImageArrayAdapter constructor.
-         * @param context the context.
+         *
+         * @param context            the context.
          * @param textViewResourceId resource id of the text view.
-         * @param objects to be displayed.
-         * @param ids resource id of the images to be displayed.
-         * @param i index of the previous selected item.
+         * @param objects            to be displayed.
+         * @param ids                resource id of the images to be displayed.
+         * @param i                  index of the previous selected item.
          */
         public ImageArrayAdapter(Context context, int textViewResourceId,
                                  CharSequence[] objects, int[] ids, int i) {
@@ -95,20 +104,22 @@ public class ImageListPreference extends ListPreference {
             index = i;
             resourceIds = ids;
         }
+
         /**
          * {@inheritDoc}
          */
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = ((Activity)getContext()).getLayoutInflater();
+            LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
             View row = inflater.inflate(R.layout.image_list_item, parent, false);
 
-            ImageView imageView = (ImageView)row.findViewById(R.id.image);
+            ImageView imageView = (ImageView) row.findViewById(R.id.image);
             imageView.setImageResource(resourceIds[position]);
 
-            CheckedTextView checkedTextView = (CheckedTextView)row.findViewById(
+            CheckedTextView checkedTextView = (CheckedTextView) row.findViewById(
                     R.id.check);
 
             checkedTextView.setText(getItem(position));
+            checkedTextView.setCheckMarkDrawable(Resources.getSystem().getDrawable(mRadioDrawableId));
 
             if (position == index) {
                 checkedTextView.setChecked(true);
