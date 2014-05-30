@@ -60,6 +60,11 @@
         android:title="@string/identicons_contacts_list_title"
         android:summary="@string/identicons_contacts_list_summary"/>
 
+    <CheckBoxPreference
+        android:key="identicons_contacts_ignore_visibility"
+        android:title="@string/identicons_contacts_ignore_visibility_title"
+        android:summary="@string/identicons_contacts_ignore_visibility_summary"/>
+
     <Preference
         android:key="about"
         android:title="@string/about_title"

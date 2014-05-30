@@ -35,6 +35,7 @@ public class Config {
     public static final String PREF_CREATE = "identicons_create";
     public static final String PREF_REMOVE = "identicons_remove";
     public static final String PREF_CONTACTS_LIST = "identicons_contacts_list";
+    public static final String PREF_CONTACTS_IGNORE_VISIBILITY = "identicons_contacts_ignore_visibility";
     public static final String PREF_ABOUT = "about";
     public static final String PREF_MAX_CONTACT_ID = "max_contact_id";
 
@@ -80,6 +81,10 @@ public class Config {
 
     public int getMaxContactID() {
         return getInt(PREF_MAX_CONTACT_ID, 0);
+    }
+
+    public boolean shouldIgnoreContactVisibility() {
+        return getBoolean(PREF_CONTACTS_IGNORE_VISIBILITY, false);
     }
 
     public void setEnabled(boolean enabled) {

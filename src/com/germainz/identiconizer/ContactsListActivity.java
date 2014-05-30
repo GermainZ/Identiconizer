@@ -164,6 +164,8 @@ public class ContactsListActivity extends ListActivity {
                 ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
         };
         String selection = "in_visible_group = '1'";
+        if (Config.getInstance(this).shouldIgnoreContactVisibility())
+            selection = null;
         String sortOrder = "display_name COLLATE LOCALIZED ASC";
 
         return getContentResolver().query(uri, projection, selection, null, sortOrder);

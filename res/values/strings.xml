@@ -54,6 +54,8 @@
     <string name="identicons_contacts_list_summary">View contacts list and manage identicons
         for wanted contacts
     </string>
+    <string name="identicons_contacts_ignore_visibility_title">Ignore contact group visibility</string>
+    <string name="identicons_contacts_ignore_visibility_summary">Useful for DAVdroid users.</string>
     <string name="identicons_size_title">Identicon Size</string>
     <string name="identicons_size_summary">Contact photo size</string>
     <string name="about_title">About Identiconizer!</string>

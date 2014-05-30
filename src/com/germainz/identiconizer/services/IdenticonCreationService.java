@@ -32,6 +32,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.germainz.identiconizer.Config;
 import com.germainz.identiconizer.ContactInfo;
 import com.germainz.identiconizer.ErrorsListActivity;
 import com.germainz.identiconizer.identicons.IdenticonFactory;
@@ -107,6 +108,8 @@ public class IdenticonCreationService extends IntentService {
                 "photo_id"
         };
         String selection = "in_visible_group = '1'";
+        if (Config.getInstance(this).shouldIgnoreContactVisibility())
+            selection = null;
         String sortOrder = "display_name COLLATE LOCALIZED ASC";
 
         return getContentResolver().query(uri, projection, selection, null, sortOrder);
