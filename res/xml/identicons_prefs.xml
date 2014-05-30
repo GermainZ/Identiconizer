@@ -48,20 +48,17 @@
     <Preference
         android:key="identicons_create"
         android:title="@string/identicons_create_title"
-        android:summary="@string/identicons_create_summary"
-        android:dependency="identicons_enabled"/>
+        android:summary="@string/identicons_create_summary"/>
 
     <Preference
         android:key="identicons_remove"
         android:title="@string/identicons_remove_title"
-        android:summary="@string/identicons_remove_summary"
-        android:dependency="identicons_enabled"/>
+        android:summary="@string/identicons_remove_summary"/>
 
     <Preference
         android:key="identicons_contacts_list"
         android:title="@string/identicons_contacts_list_title"
-        android:summary="@string/identicons_contacts_list_summary"
-        android:dependency="identicons_enabled"/>
+        android:summary="@string/identicons_contacts_list_summary"/>
 
     <Preference
         android:key="about"
