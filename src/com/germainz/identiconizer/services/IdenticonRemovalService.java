@@ -70,14 +70,14 @@ public class IdenticonRemovalService extends IntentService {
         final int totalPhotos = cursor.getCount();
         int currentPhoto = 1;
         while (cursor.moveToNext()) {
-            final long dataId = cursor.getLong(0);
+            final long contactId = cursor.getLong(0);
             updateNotification(getString(R.string.identicons_remove_service_running_title),
                     String.format(getString(R.string.identicons_remove_service_contact_summary),
-                            currentPhoto++, totalPhotos));
+                            currentPhoto++, totalPhotos)
+            );
             byte[] data = cursor.getBlob(1);
-            if (IdenticonUtils.isIdenticon(data)) {
-                removeIdenticon(dataId);
-            }
+            if (IdenticonUtils.isIdenticon(data))
+                removeIdenticon(contactId);
         }
         cursor.close();
 
@@ -99,8 +99,21 @@ public class IdenticonRemovalService extends IntentService {
         for (int i = 0, j = contactInfos.size(); i < j; i++) {
             updateNotification(getString(R.string.identicons_remove_service_running_title),
                     String.format(getString(R.string.identicons_remove_service_contact_summary),
-                            i, j));
-            removeIdenticon(contactInfos.get(i).nameRawContactId);
+                            i, j)
+            );
+            // ContactsListActivity gives us name_raw_contact_id, which is not unique.
+            // For example, if the user has 3 accounts (e.g. Google, WhatsApp and Viber) then three
+            // photo rows will exist, one for each.
+            // We want to get those that have a photo set (any photo, not identicons.)
+            // We can't assume name_raw_contact_id == raw_contact_id because it might only match
+            // one photo row (which might be empty) when multiple accounts are present.
+            Cursor cursor = getIdenticonPhotos(contactInfos.get(i).nameRawContactId);
+            while (cursor.moveToNext()) {
+                int contactId = cursor.getInt(0);
+                byte[] data = cursor.getBlob(1);
+                if (data != null)
+                    removeIdenticon(contactId);
+            }
         }
 
         if (!mOps.isEmpty()) {
@@ -119,7 +132,7 @@ public class IdenticonRemovalService extends IntentService {
 
     private Cursor getIdenticonPhotos() {
         Uri uri = ContactsContract.Data.CONTENT_URI;
-        String[] projection = new String[]{ContactsContract.Data.RAW_CONTACT_ID,
+        String[] projection = new String[]{ContactsContract.Data._ID,
                 ContactsContract.Data.DATA15};
         final String selection = ContactsContract.Data.DATA15
                 + " IS NOT NULL AND "
@@ -130,10 +143,24 @@ public class IdenticonRemovalService extends IntentService {
         return getContentResolver().query(uri, projection, selection, selectionArgs, null);
     }
 
+    private Cursor getIdenticonPhotos(int nameRawContactId) {
+        Uri uri = ContactsContract.Data.CONTENT_URI;
+        String[] projection = new String[]{ContactsContract.Data._ID,
+                ContactsContract.Data.DATA15};
+        final String selection = "name_raw_contact_id = ? AND "
+                + ContactsContract.Data.DATA15
+                + " IS NOT NULL AND "
+                + ContactsContract.Data.MIMETYPE
+                + " = ?";
+        final String[] selectionArgs = new String[]{String.valueOf(nameRawContactId),
+                ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE};
+        return getContentResolver().query(uri, projection, selection, selectionArgs, null);
+    }
+
     private void removeIdenticon(long id) {
         ContentValues values = new ContentValues();
         values.put(ContactsContract.Data.DATA15, (byte[]) null);
-        final String selection = ContactsContract.Data.RAW_CONTACT_ID
+        final String selection = ContactsContract.Data._ID
                 + " = ? AND "
                 + ContactsContract.Data.MIMETYPE
                 + " = ?";
