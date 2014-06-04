@@ -88,7 +88,7 @@ public class XposedMod implements IXposedHookLoadPackage, IXposedHookInitPackage
                             }
                         }
                 );
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 Context systemContext = (Context) getStaticObjectField(findClass("android.app.ActivityThread", null), "mSystemContext");
                 if (systemContext == null) {
                     Object activityThread = callStaticMethod(findClass("android.app.ActivityThread", null), "currentActivityThread");
