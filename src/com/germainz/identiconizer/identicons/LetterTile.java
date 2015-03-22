@@ -26,14 +26,28 @@ import android.text.TextUtils;
 
 public class LetterTile extends Identicon {
 
-    // Colors, font and values taken from the Gmail APK
+    // Colors, font and values taken from the Google Messenger APK
     private final Rect mBounds = new Rect();
     private final Canvas mCanvas = new Canvas();
     private final TextPaint mPaint = new TextPaint();
-    private static final int[] COLORS = new int[]{Color.parseColor("#fff16364"), Color.parseColor("#fff58559"),
-            Color.parseColor("#fff9a43e"), Color.parseColor("#ffe4c62e"), Color.parseColor("#ff67bf74"),
-            Color.parseColor("#ff59a2be"), Color.parseColor("#ff2093cd"), Color.parseColor("#ffad62a7")};
-    private static final int DEFAULT_COLOR = Color.parseColor("#ffd66161");
+    private static final int[] COLORS = new int[]{
+            Color.parseColor("#C90000"), Color.parseColor("#CE3B00"),
+            Color.parseColor("#F06B00"), Color.parseColor("#FF8E00"),
+            Color.parseColor("#82E00D"), Color.parseColor("#C0C448"),
+            Color.parseColor("#C2A722"), Color.parseColor("#CA7B00"),
+            Color.parseColor("#74C13D"), Color.parseColor("#28B724"),
+            Color.parseColor("#52A710"), Color.parseColor("#00934D"),
+            Color.parseColor("#00B967"), Color.parseColor("#54BC93"),
+            Color.parseColor("#0095A8"), Color.parseColor("#6AB3B9"),
+            Color.parseColor("#44AAE7"), Color.parseColor("#2D8DCD"),
+            Color.parseColor("#4574EC"), Color.parseColor("#3B71D1"),
+            Color.parseColor("#9121CB"), Color.parseColor("#8400B3"),
+            Color.parseColor("#782ECC"), Color.parseColor("#4413B9"),
+            Color.parseColor("#B621CB"), Color.parseColor("#AA00CC"),
+            Color.parseColor("#AB00B6"), Color.parseColor("#FF2033"),
+            Color.parseColor("#A29195"), Color.parseColor("#A5777F"),
+            Color.parseColor("#C94979"), Color.parseColor("#EF005A"),
+            Color.parseColor("#444444"), Color.parseColor("#363636")};
     private static final int TILE_FONT_COLOR = Color.WHITE;
 
     public LetterTile() {
@@ -77,7 +91,7 @@ public class LetterTile extends Identicon {
     }
 
     private int pickColor(String s) {
-        int i = Math.abs(s.hashCode()) % 8;
+        int i = Math.abs(s.hashCode() - 17 ) % 34;
         if (i < COLORS.length)
             return COLORS[i];
         else
