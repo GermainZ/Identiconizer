@@ -44,7 +44,7 @@ public class IdenticonRemovalService extends IntentService {
     private static final String TAG = "IdenticonRepairService";
     private static final int SERVICE_NOTIFICATION_ID = 8675311;
 
-    ArrayList<ContentProviderOperation> mOps = new ArrayList<>();
+    ArrayList<ContentProviderOperation> mOps = new ArrayList<ContentProviderOperation>();
 
     public IdenticonRemovalService() {
         super("IdenticonRepairService");

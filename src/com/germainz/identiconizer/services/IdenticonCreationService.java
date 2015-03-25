@@ -48,8 +48,8 @@ public class IdenticonCreationService extends IntentService {
     private static final int SERVICE_NOTIFICATION_ID = 8675309;
     private static final int ERROR_NOTIFICATION_ID = 8675310;
 
-    private ArrayList<ContactInfo> mInsertErrors = new ArrayList<>();
-    private ArrayList<ContactInfo> mUpdateErrors = new ArrayList<>();
+    private ArrayList<ContactInfo> mInsertErrors = new ArrayList<ContactInfo>();
+    private ArrayList<ContactInfo> mUpdateErrors = new ArrayList<ContactInfo>();
 
     public IdenticonCreationService() {
         super(TAG);
