@@ -50,7 +50,7 @@ import java.util.ArrayList;
 
 public class ContactsListActivity extends ListActivity {
 
-    ArrayList<Integer> checkedItems = new ArrayList<Integer>();
+    ArrayList<Integer> checkedItems = new ArrayList<>();
     ContactsCursorAdapter mAdapter;
     Cursor mCursor;
     final static int SERVICE_ADD = 0;
@@ -135,7 +135,7 @@ public class ContactsListActivity extends ListActivity {
 
     private void startIdenticonService(int serviceType) {
         int displayName = mCursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME);
-        ArrayList<ContactInfo> contactsList = new ArrayList<ContactInfo>();
+        ArrayList<ContactInfo> contactsList = new ArrayList<>();
         int contactId = mCursor.getColumnIndexOrThrow("name_raw_contact_id");
         mCursor.moveToPosition(-1);
         while (mCursor.moveToNext()) {

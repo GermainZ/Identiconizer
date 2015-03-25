@@ -37,7 +37,7 @@ public class ErrorsListActivity extends ListActivity {
         ArrayList<ContactInfo> insertErrors = getIntent().getParcelableArrayListExtra("insertErrors");
         ArrayList<ContactInfo> updateErrors = getIntent().getParcelableArrayListExtra("updateErrors");
 
-        ArrayList<String> listItems = new ArrayList<String>();
+        ArrayList<String> listItems = new ArrayList<>();
         for (ContactInfo insertError : insertErrors)
             listItems.add(getString(R.string.sql_error, getString(R.string.sql_insert),
                     insertError.contactName, insertError.contactPhotoSize / 1024, insertError.nameRawContactId));
@@ -45,7 +45,7 @@ public class ErrorsListActivity extends ListActivity {
             listItems.add(getString(R.string.sql_error, getString(R.string.sql_update),
                     updateError.contactName, updateError.contactPhotoSize / 1024, updateError.nameRawContactId));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
         setListAdapter(adapter);
     }
 }
