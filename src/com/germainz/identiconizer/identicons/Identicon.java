@@ -34,6 +34,7 @@ public abstract class Identicon {
 
     public static int SIZE = 96;
     public static int BG_COLOR = 0xFFDDDDDD;
+    public static boolean SERIF = false;
 
     /**
      * Generates an identicon bitmap using the provided hash
