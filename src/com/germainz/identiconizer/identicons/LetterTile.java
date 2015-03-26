@@ -51,9 +51,16 @@ public class LetterTile extends Identicon {
     private static final int TILE_FONT_COLOR = Color.WHITE;
 
     public LetterTile() {
-        Typeface sansSerifLight = Typeface.create("sans-serif-light", 0);
-        mPaint.setTypeface(sansSerifLight);
-        int tileLetterFontSize = 69 * SIZE / 100;
+        Typeface serif = Typeface.create("serif", 0);
+        Typeface sans = Typeface.create("sans-serif-light", 0);
+        if(SERIF) {
+            mPaint.setTypeface(serif);
+        } else {
+            mPaint.setTypeface(sans);
+        }
+        float divider = 1;
+        if (LENGTH != 1) divider = ((float)LENGTH ) / (float)2;
+        float tileLetterFontSize = ( 69 * SIZE / 100 ) / divider;
         mPaint.setTextSize(tileLetterFontSize);
         mPaint.setColor(TILE_FONT_COLOR);
         mPaint.setTextAlign(android.graphics.Paint.Align.CENTER);
@@ -75,13 +82,12 @@ public class LetterTile extends Identicon {
         if (TextUtils.isEmpty(name)) {
             return null;
         }
-        char[] nameInitial = new char[]{Character.toUpperCase(name.charAt(0))};
         Bitmap bitmap = getBitmap();
         Canvas canvas = mCanvas;
         canvas.setBitmap(bitmap);
         canvas.drawColor(pickColor(name));
-        mPaint.getTextBounds(nameInitial, 0, 1, mBounds);
-        canvas.drawText(nameInitial, 0, 1, SIZE / 2, SIZE / 2 + (mBounds.bottom - mBounds.top) / 2, mPaint);
+        mPaint.getTextBounds(name, 0, LENGTH, mBounds);
+        canvas.drawText(name, 0, LENGTH, SIZE / 2, SIZE / 2 + (mBounds.bottom - mBounds.top) / 2, mPaint);
         return bitmap;
     }
 
@@ -91,7 +97,7 @@ public class LetterTile extends Identicon {
     }
 
     private int pickColor(String s) {
-        int i = Math.abs(s.hashCode() - 17 ) % 34;
+        int i = Math.abs(s.hashCode() - 16 ) % 34;
         if (i < COLORS.length)
             return COLORS[i];
         else

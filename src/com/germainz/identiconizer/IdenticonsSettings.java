@@ -52,6 +52,7 @@ import com.larswerkman.holocolorpicker.ValueBar;
 public class IdenticonsSettings extends PreferenceActivity implements OnPreferenceChangeListener {
     private SwitchPreference mEnabledPref;
     private ImageListPreference mStylePref;
+    private Preference mLengthPref;
     private Preference mBgColorPref;
 
     private CharSequence mPreviousTitle;
@@ -140,6 +141,39 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                 return true;
             }
         });
+
+        mLengthPref = findPreference(Config.PREF_LENGTH);
+        final int length = mConfig.getIdenticonLength();
+        final String length_summary = " (Text may overflow when too long)";
+        mLengthPref.setSummary(length + length_summary);
+        mLengthPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final NumberPicker npView = new NumberPicker(IdenticonsSettings.this);
+
+                final int minValue = 1;
+                final int maxValue = 5;
+                npView.setMinValue(minValue);
+                npView.setMaxValue(maxValue);
+                npView.setValue((mConfig.getIdenticonLength()));
+
+                new AlertDialog.Builder(IdenticonsSettings.this)
+                        .setView(npView)
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                int length = npView.getValue();
+                                mConfig.setIdenticonLength(length);
+                                mLengthPref.setSummary(length + length_summary);
+                            }
+                        })
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .create().show();
+                return true;
+            }
+        });
+        if (mConfig.getIdenticonStyle() != IdenticonFactory.IDENTICON_STYLE_GMAIL)
+            mLengthPref.setEnabled(false);
+
 
         mBgColorPref = findPreference(Config.PREF_BG_COLOR);
         if (mConfig.getIdenticonStyle() == IdenticonFactory.IDENTICON_STYLE_GMAIL)
@@ -236,6 +270,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             int style = Integer.valueOf((String) newValue);
             updateStyleSummary(style);
             mBgColorPref.setEnabled(style != IdenticonFactory.IDENTICON_STYLE_GMAIL);
+            mLengthPref.setEnabled(style == IdenticonFactory.IDENTICON_STYLE_GMAIL);
             return true;
         }
         return false;
