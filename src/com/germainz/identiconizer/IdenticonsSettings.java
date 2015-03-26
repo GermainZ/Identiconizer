@@ -52,6 +52,7 @@ import com.larswerkman.holocolorpicker.ValueBar;
 public class IdenticonsSettings extends PreferenceActivity implements OnPreferenceChangeListener {
     private SwitchPreference mEnabledPref;
     private ImageListPreference mStylePref;
+    private SwitchPreference mSerifPref;
     private Preference mBgColorPref;
 
     private CharSequence mPreviousTitle;
@@ -140,6 +141,18 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                 return true;
             }
         });
+
+	mSerifPref = (SwitchPreference) findPreference(Config.PREF_SERIF);
+        mSerifPref.setChecked(mConfig.isIdenticonSerif());
+        if (mConfig.getIdenticonStyle() != IdenticonFactory.IDENTICON_STYLE_GMAIL)
+            mSerifPref.setEnabled(false);
+        mSerifPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                     public boolean onPreferenceChange(Preference preference, Object newValue) {
+                         boolean serif = !mConfig.isIdenticonSerif();
+                         mConfig.setIdenticonSerif(serif);
+                         return true;
+                     }
+                 });
 
         mBgColorPref = findPreference(Config.PREF_BG_COLOR);
         if (mConfig.getIdenticonStyle() == IdenticonFactory.IDENTICON_STYLE_GMAIL)
@@ -236,6 +249,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             int style = Integer.valueOf((String) newValue);
             updateStyleSummary(style);
             mBgColorPref.setEnabled(style != IdenticonFactory.IDENTICON_STYLE_GMAIL);
+            mSerifPref.setEnabled(style == IdenticonFactory.IDENTICON_STYLE_GMAIL);
             return true;
         }
         return false;

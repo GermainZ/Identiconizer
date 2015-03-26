@@ -51,7 +51,13 @@ public class LetterTile extends Identicon {
     private static final int TILE_FONT_COLOR = Color.WHITE;
 
     public LetterTile() {
-        Typeface sansSerifLight = Typeface.create("sans-serif-light", 0);
+        Typeface serif = Typeface.create("serif", 0);
+        Typeface sans = Typeface.create("sans-serif-light", 0);
+        if(SERIF) {
+            mPaint.setTypeface(serif);
+        } else {
+            mPaint.setTypeface(sans);
+        }
         mPaint.setTypeface(sansSerifLight);
         int tileLetterFontSize = 69 * SIZE / 100;
         mPaint.setTextSize(tileLetterFontSize);
