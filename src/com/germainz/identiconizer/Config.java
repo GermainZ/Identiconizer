@@ -33,6 +33,7 @@ public class Config {
     public static final String PREF_SIZE = "identicons_size";
     public static final String PREF_BG_COLOR = "identicons_bg_color";
     public static final String PREF_SERIF = "identicons_serif";
+    public static final String PREF_LENGTH = "identicons_length";
     public static final String PREF_CREATE = "identicons_create";
     public static final String PREF_REMOVE = "identicons_remove";
     public static final String PREF_CONTACTS_LIST = "identicons_contacts_list";
@@ -83,6 +84,9 @@ public class Config {
     public boolean isIdenticonSerif() {
         return getBoolean(PREF_SERIF, false);
     }
+    public int getIdenticonLength() {
+        return getInt(PREF_LENGTH, 1);
+    }
 
     public int getMaxContactID() {
         return getInt(PREF_MAX_CONTACT_ID, 0);
@@ -110,6 +114,10 @@ public class Config {
 
     public void setIdenticonSerif(boolean serif) {
         mPreferences.edit().putBoolean(PREF_SERIF, serif).commit();
+    }
+
+    public void setIdenticonLength(int length) {
+        mPreferences.edit().putInt(PREF_LENGTH, length).commit();
     }
 
     public void setMaxContactID(int id) {
