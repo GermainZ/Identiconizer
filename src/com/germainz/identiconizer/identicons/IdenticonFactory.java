@@ -38,13 +38,15 @@ public class IdenticonFactory {
      * @param type
      * @param size
      * @param bgColor
+     * @param serif
      * @param length
      * @return
      */
-    public static Identicon makeIdenticon(int type, int size, int bgColor, int length) {
+    public static Identicon makeIdenticon(int type, int size, int bgColor, boolean serif, int length) {
         Identicon.SIZE = size;
         Identicon.BG_COLOR = bgColor;
-	Identicon.LENGTH = length;
+        Identicon.SERIF = serif;
+        Identicon.LENGTH = length;
         switch (type) {
             case IDENTICON_STYLE_RETRO:
                 return new RetroIdenticon();
@@ -70,8 +72,7 @@ public class IdenticonFactory {
      */
     public static Identicon makeIdenticon(Context context) {
         Config config = Config.getInstance(context);
-        return makeIdenticon(config.getIdenticonStyle(), config.getIdenticonSize(),
-		config.getIdenticonBgColor(), config.getIdenticonLength;);
+        return makeIdenticon(config.getIdenticonStyle(), config.getIdenticonSize(), config.getIdenticonBgColor(), config.isIdenticonSerif(), config.getIdenticonLength());
     }
 }
 

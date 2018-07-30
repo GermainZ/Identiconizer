@@ -52,6 +52,7 @@ import com.larswerkman.holocolorpicker.ValueBar;
 public class IdenticonsSettings extends PreferenceActivity implements OnPreferenceChangeListener {
     private SwitchPreference mEnabledPref;
     private ImageListPreference mStylePref;
+    private SwitchPreference mSerifPref;
     private Preference mLengthPref;
     private Preference mBgColorPref;
 
@@ -142,6 +143,18 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             }
         });
 
+        mSerifPref = (SwitchPreference) findPreference(Config.PREF_SERIF);
+        mSerifPref.setChecked(mConfig.isIdenticonSerif());
+        if (mConfig.getIdenticonStyle() != IdenticonFactory.IDENTICON_STYLE_GMAIL)
+            mSerifPref.setEnabled(false);
+        mSerifPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                     public boolean onPreferenceChange(Preference preference, Object newValue) {
+                         boolean serif = !mConfig.isIdenticonSerif();
+                         mConfig.setIdenticonSerif(serif);
+                         return true;
+                     }
+         });
+
         mLengthPref = findPreference(Config.PREF_LENGTH);
         final int length = mConfig.getIdenticonLength();
         final String length_summary = " (Text may overflow when too long)";
@@ -173,7 +186,6 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
         });
         if (mConfig.getIdenticonStyle() != IdenticonFactory.IDENTICON_STYLE_GMAIL)
             mLengthPref.setEnabled(false);
-
 
         mBgColorPref = findPreference(Config.PREF_BG_COLOR);
         if (mConfig.getIdenticonStyle() == IdenticonFactory.IDENTICON_STYLE_GMAIL)
@@ -270,6 +282,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             int style = Integer.valueOf((String) newValue);
             updateStyleSummary(style);
             mBgColorPref.setEnabled(style != IdenticonFactory.IDENTICON_STYLE_GMAIL);
+            mSerifPref.setEnabled(style == IdenticonFactory.IDENTICON_STYLE_GMAIL);
             mLengthPref.setEnabled(style == IdenticonFactory.IDENTICON_STYLE_GMAIL);
             return true;
         }
