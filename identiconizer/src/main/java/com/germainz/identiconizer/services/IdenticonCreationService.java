@@ -19,6 +19,7 @@ package com.germainz.identiconizer.services;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
@@ -27,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -35,11 +37,11 @@ import android.text.TextUtils;
 import com.germainz.identiconizer.Config;
 import com.germainz.identiconizer.ContactInfo;
 import com.germainz.identiconizer.ErrorsListActivity;
-import com.germainz.identiconizer.identicons.IdenticonFactory;
-import com.germainz.identiconizer.identicons.IdenticonUtils;
 import com.germainz.identiconizer.IdenticonsSettings;
 import com.germainz.identiconizer.R;
 import com.germainz.identiconizer.identicons.Identicon;
+import com.germainz.identiconizer.identicons.IdenticonFactory;
+import com.germainz.identiconizer.identicons.IdenticonUtils;
 
 import java.util.ArrayList;
 
@@ -197,10 +199,14 @@ public class IdenticonCreationService extends IntentService {
     }
 
     private Notification createNotification() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            NotificationChannel chan = new NotificationChannel(TAG, TAG, NotificationManager.IMPORTANCE_NONE);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(chan);
+        }
         Intent intent = new Intent(this, IdenticonsSettings.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        @SuppressWarnings("deprecation")
-        Notification notice = new Notification.Builder(this)
+        return new NotificationCompat.Builder(this, TAG)
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.identicons_creation_service_running_title))
@@ -208,8 +214,7 @@ public class IdenticonCreationService extends IntentService {
                 .setSmallIcon(R.drawable.ic_settings_identicons)
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(contentIntent)
-                .getNotification();
-        return notice;
+                .build();
     }
 
     private void updateNotification(String title, String text) {

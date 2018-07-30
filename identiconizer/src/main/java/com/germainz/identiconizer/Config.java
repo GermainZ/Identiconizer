@@ -47,7 +47,7 @@ public class Config {
     }
 
     private Config(Context context) {
-        mPreferences = context.getSharedPreferences(PREFS, Context.MODE_WORLD_READABLE);
+        mPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
     public static Config getInstance(Context context) {

@@ -40,7 +40,7 @@
             android:key="identicons_bg_color"
             android:title="@string/identicons_bg_color_title"/>
 
-        <Preference
+        <SwitchPreference
             android:key="identicons_serif"
             android:title="@string/identicons_serif_title"
             android:summary="@string/identicons_serif_summary"/>

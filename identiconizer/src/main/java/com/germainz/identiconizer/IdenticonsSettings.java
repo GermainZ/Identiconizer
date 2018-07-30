@@ -17,10 +17,12 @@
 
 package com.germainz.identiconizer;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -31,7 +33,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.ContactsContract;
-import android.text.method.LinkMovementMethod;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +52,10 @@ import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SaturationBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 
+import java.io.File;
+
 public class IdenticonsSettings extends PreferenceActivity implements OnPreferenceChangeListener {
+    private static final int PERMISSIONS_REQUEST_CODE = 123;
     private SwitchPreference mEnabledPref;
     private ImageListPreference mStylePref;
     private SwitchPreference mSerifPref;
@@ -63,8 +69,11 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getPreferenceManager().setSharedPreferencesMode(MODE_WORLD_READABLE);
+        getPreferenceManager().setSharedPreferencesMode(MODE_PRIVATE);
         addPreferencesFromResource(R.xml.identicons_prefs);
+        File prefsDir = new File(this.getApplicationInfo().dataDir, "shared_prefs");
+        File prefsFile = new File(prefsDir, getPreferenceManager().getSharedPreferencesName() + ".xml");
+        if (prefsFile.exists()) prefsFile.setReadable(true, false);
         mConfig = Config.getInstance(this);
 
         mEnabledPref = (SwitchPreference) findPreference(Config.PREF_ENABLED);
@@ -148,12 +157,12 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
         if (mConfig.getIdenticonStyle() != IdenticonFactory.IDENTICON_STYLE_GMAIL)
             mSerifPref.setEnabled(false);
         mSerifPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-                         boolean serif = !mConfig.isIdenticonSerif();
-                         mConfig.setIdenticonSerif(serif);
-                         return true;
-                     }
-         });
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean serif = !mConfig.isIdenticonSerif();
+                mConfig.setIdenticonSerif(serif);
+                return true;
+            }
+        });
 
         mLengthPref = findPreference(Config.PREF_LENGTH);
         final int length = mConfig.getIdenticonLength();
@@ -254,6 +263,34 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
             }
         });
 
+        checkPermissions();
+
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CONTACTS)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Permission required")
+                        .setMessage("This app requires access to your contacts to function")
+                        .setPositiveButton("Request permission", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(IdenticonsSettings.this,
+                                        new String[]{Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS},
+                                        PERMISSIONS_REQUEST_CODE);
+                            }
+                        })
+                        .show();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS},
+                        PERMISSIONS_REQUEST_CODE);
+            }
+        }
+
     }
 
     @Override
@@ -265,9 +302,29 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        File prefsDir = new File(this.getApplicationInfo().dataDir, "shared_prefs");
+        File prefsFile = new File(prefsDir, getPreferenceManager().getSharedPreferencesName() + ".xml");
+        if (prefsFile.exists()) prefsFile.setReadable(true, false);
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         this.getActionBar().setTitle(mPreviousTitle);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, "This app cannot function without the required permissions", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        }
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {

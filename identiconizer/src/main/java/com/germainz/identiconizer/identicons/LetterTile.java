@@ -48,6 +48,7 @@ public class LetterTile extends Identicon {
             Color.parseColor("#A29195"), Color.parseColor("#A5777F"),
             Color.parseColor("#C94979"), Color.parseColor("#EF005A"),
             Color.parseColor("#444444"), Color.parseColor("#363636")};
+    private static final int DEFAULT_COLOR = Color.parseColor("#FFD66161");
     private static final int TILE_FONT_COLOR = Color.WHITE;
 
     public LetterTile() {
