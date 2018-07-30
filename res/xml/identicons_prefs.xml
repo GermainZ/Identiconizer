@@ -41,6 +41,10 @@
             android:title="@string/identicons_bg_color_title"/>
 
         <Preference
+            android:key="identicons_length"
+            android:title="@string/identicons_length_title"/>
+
+        <Preference
             android:key="identicons_size"
             android:title="@string/identicons_size_title"/>
 
