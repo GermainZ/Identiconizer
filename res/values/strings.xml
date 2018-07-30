@@ -43,6 +43,8 @@
     <string name="section_appearance">Identicons appearance</string>
     <string name="identicons_style_title">Style</string>
     <string name="identicons_size_title">Size</string>
+    <string name="identicons_serif_title">Serif font</string>
+    <string name="identicons_serif_summary">Use font with serif</string>
     <string name="identicons_length_title">Text length</string>
     <string name="identicons_bg_color_title">Background Color</string>
     <!-- Manage Identicons -->
