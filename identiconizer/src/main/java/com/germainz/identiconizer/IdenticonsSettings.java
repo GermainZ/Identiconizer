@@ -21,6 +21,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -55,6 +56,7 @@ import com.larswerkman.holocolorpicker.SaturationBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 
 import java.io.File;
+import java.util.Locale;
 
 public class IdenticonsSettings extends AppCompatPreferenceActivity implements OnPreferenceChangeListener {
     private static final int PERMISSIONS_REQUEST_CODE = 123;
@@ -77,6 +79,13 @@ public class IdenticonsSettings extends AppCompatPreferenceActivity implements O
             bar.setDisplayShowTitleEnabled(true);
             bar.setTitle(R.string.about_title);
             addPreferencesFromResource(R.xml.settings_about);
+            try {
+                PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                findPreference("version").setSummary(
+                        String.format(Locale.ENGLISH, "%s (%d)", pInfo.versionName, pInfo.versionCode));
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
             return;
         }
 

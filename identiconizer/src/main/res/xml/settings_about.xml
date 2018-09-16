@@ -11,6 +11,10 @@
             android:data="http://forum.xda-developers.com/showthread.php?t=2718943" />
     </Preference>
 
+    <Preference
+        android:key="version"
+        android:title="@string/version" />
+
     <PreferenceCategory android:title="@string/thanks">
 
         <Preference
