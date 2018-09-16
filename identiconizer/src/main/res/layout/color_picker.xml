@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2013-2014 GermainZ@xda-developers.com
 **
@@ -18,16 +17,17 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/color_picker_root"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:id="@+id/color_picker_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <com.larswerkman.holocolorpicker.ColorPicker
         android:id="@+id/picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="match_parent"
@@ -35,12 +35,12 @@
         android:paddingLeft="16dip"
         android:text="@string/saturation"
         android:textAllCaps="true"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <com.larswerkman.holocolorpicker.SaturationBar
         android:id="@+id/saturationbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
@@ -48,12 +48,12 @@
         android:paddingLeft="16dip"
         android:text="@string/value"
         android:textAllCaps="true"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <com.larswerkman.holocolorpicker.ValueBar
         android:id="@+id/valuebar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
@@ -61,12 +61,12 @@
         android:paddingLeft="16dip"
         android:text="@string/opacity"
         android:textAllCaps="true"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <com.larswerkman.holocolorpicker.OpacityBar
         android:id="@+id/opacitybar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
         android:paddingLeft="16dip"
         android:text="@string/hex"
         android:textAllCaps="true"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -84,18 +84,19 @@
         <EditText
             android:id="@+id/value"
             android:layout_width="0dip"
-            android:layout_weight=".75"
             android:layout_height="wrap_content"
+            android:layout_weight=".75"
             android:inputType="textNoSuggestions"
             android:maxLength="8"
-            android:textAllCaps="true"/>
+            android:textAllCaps="true" />
 
         <Button
             android:id="@+id/apply_value"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="0dip"
-            android:layout_weight=".25"
             android:layout_height="wrap_content"
-            android:text="@string/apply"/>
+            android:layout_weight=".25"
+            android:text="@string/apply" />
 
     </LinearLayout>
 

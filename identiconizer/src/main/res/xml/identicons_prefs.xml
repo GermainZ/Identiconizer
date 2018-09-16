@@ -81,54 +81,17 @@
             android:title="@string/identicons_contacts_ignore_visibility_title"
             android:summary="@string/identicons_contacts_ignore_visibility_summary"/>
 
-        <PreferenceScreen
+
+        <Preference
             android:key="@string/about"
             android:title="@string/about_title">
 
-            <Preference
-                android:title="@string/support_title"
-                android:summary="@string/support_summary">
-                <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="http://forum.xda-developers.com/showthread.php?t=2718943"/>
-            </Preference>
+            <intent
+                android:action="com.germainz.identiconizer.SETTINGS_ABOUT"
+                android:targetClass="com.germainz.identiconizer.IdenticonsSettings"
+                android:targetPackage="com.germainz.identiconizer" />
 
-            <PreferenceCategory
-                android:title="@string/thanks">
-
-                <Preference
-                    android:title="@string/chameleonos_title"
-                    android:summary="@string/chameleonos_summary">
-                    <intent
-                        android:action="android.intent.action.VIEW"
-                        android:data="http://www.chameleonos.org/"/>
-                </Preference>
-
-            </PreferenceCategory>
-
-            <PreferenceCategory
-                android:title="@string/used_libraries">
-
-                <Preference
-                    android:title="@string/xposed_api_title"
-                    android:summary="@string/xposed_api_summary">
-                    <intent
-                        android:action="android.intent.action.VIEW"
-                        android:data="https://github.com/rovo89/XposedBridge"/>
-                </Preference>
-
-                <Preference
-                    android:title="@string/holo_colorpicker_title"
-                    android:summary="@string/holo_colorpicker_summary">
-                    <intent
-                        android:action="android.intent.action.VIEW"
-                        android:data="https://github.com/LarsWerkman/HoloColorPicker"/>
-                </Preference>
-
-            </PreferenceCategory>
-
-        </PreferenceScreen>
-
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>

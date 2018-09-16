@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    android:key="@string/about"
+    android:title="@string/about_title">
+
+    <Preference
+        android:summary="@string/support_summary"
+        android:title="@string/support_title">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://forum.xda-developers.com/showthread.php?t=2718943" />
+    </Preference>
+
+    <PreferenceCategory android:title="@string/thanks">
+
+        <Preference
+            android:summary="@string/chameleonos_summary"
+            android:title="@string/chameleonos_title">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.chameleonos.org/" />
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/used_libraries">
+
+        <Preference
+            android:summary="@string/xposed_api_summary"
+            android:title="@string/xposed_api_title">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/rovo89/XposedBridge" />
+        </Preference>
+
+        <Preference
+            android:summary="@string/holo_colorpicker_summary"
+            android:title="@string/holo_colorpicker_title">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/LarsWerkman/HoloColorPicker" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

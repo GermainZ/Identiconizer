@@ -112,11 +112,10 @@ public class ImageListPreference extends ListPreference {
             LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
             View row = inflater.inflate(R.layout.image_list_item, parent, false);
 
-            ImageView imageView = (ImageView) row.findViewById(R.id.image);
+            ImageView imageView = row.findViewById(R.id.image);
             imageView.setImageResource(resourceIds[position]);
 
-            CheckedTextView checkedTextView = (CheckedTextView) row.findViewById(
-                    R.id.check);
+            CheckedTextView checkedTextView = row.findViewById(R.id.check);
 
             checkedTextView.setText(getItem(position));
             checkedTextView.setCheckMarkDrawable(Resources.getSystem().getDrawable(mRadioDrawableId));

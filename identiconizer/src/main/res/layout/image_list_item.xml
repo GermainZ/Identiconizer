@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Original work Copyright CMW Mobile.com, 2010.
 ** Modified work Copyright 2013-2014 GermainZ@xda-developers.com
@@ -19,25 +18,28 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="8dip">
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    android:padding="8dip">
 
     <ImageView
-            android:id="@+id/image"
-            android:src="@drawable/ic_identicons_style_retro"
-            android:layout_width="48dip"
-            android:layout_height="48dip"
-            android:layout_marginRight="8dip" />
+        android:id="@+id/image"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dip" />
 
     <CheckedTextView
-            android:id="@+id/check"
-            android:layout_width="fill_parent"
-            android:layout_height="48dip"
-            android:layout_toRightOf="@id/image"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-            android:textSize="20sp" />
+        android:id="@+id/check"
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@id/image"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:gravity="center_vertical"
+        android:textSize="20sp" />
 
 </RelativeLayout>

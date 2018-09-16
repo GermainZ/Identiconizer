@@ -18,26 +18,28 @@
 package com.germainz.identiconizer;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -54,21 +56,31 @@ import com.larswerkman.holocolorpicker.ValueBar;
 
 import java.io.File;
 
-public class IdenticonsSettings extends PreferenceActivity implements OnPreferenceChangeListener {
+public class IdenticonsSettings extends AppCompatPreferenceActivity implements OnPreferenceChangeListener {
     private static final int PERMISSIONS_REQUEST_CODE = 123;
+    private static final String ACTION_SETTINGS_ABOUT = "com.germainz.identiconizer.SETTINGS_ABOUT";
     private SwitchPreference mEnabledPref;
     private ImageListPreference mStylePref;
     private SwitchPreference mSerifPref;
     private Preference mLengthPref;
     private Preference mBgColorPref;
-
-    private CharSequence mPreviousTitle;
-
     private Config mConfig;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ActionBar bar = getSupportActionBar();
+        String action = getIntent().getAction();
+        if (action != null && action.equals(ACTION_SETTINGS_ABOUT)) {
+            bar.setHomeButtonEnabled(true);
+            bar.setDisplayHomeAsUpEnabled(true);
+            bar.setDisplayShowTitleEnabled(true);
+            bar.setTitle(R.string.about_title);
+            addPreferencesFromResource(R.xml.settings_about);
+            return;
+        }
+
+        bar.setTitle(R.string.app_name);
         getPreferenceManager().setSharedPreferencesMode(MODE_PRIVATE);
         addPreferencesFromResource(R.xml.identicons_prefs);
         File prefsDir = new File(this.getApplicationInfo().dataDir, "shared_prefs");
@@ -131,6 +143,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                 for (int i = minValue; i <= maxValue; i += step) {
                     valueSet[(i - minValue) / step] = i + " × " + i;
                 }
+                setDividerColor(npView, Color.LTGRAY);
                 npView.setMinValue(0);
                 npView.setMaxValue(valueSet.length - 1);
                 npView.setDisplayedValues(valueSet);
@@ -175,6 +188,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
 
                 final int minValue = 1;
                 final int maxValue = 5;
+                setDividerColor(npView, Color.LTGRAY);
                 npView.setMinValue(minValue);
                 npView.setMaxValue(maxValue);
                 npView.setValue((mConfig.getIdenticonLength()));
@@ -241,7 +255,7 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                     }
                 });
 
-                new AlertDialog.Builder(IdenticonsSettings.this)
+                AlertDialog alertDialog = new AlertDialog.Builder(IdenticonsSettings.this)
                         .setView(colorPickerView)
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                             @Override
@@ -259,12 +273,12 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
                             }
                         })
                         .show();
+                alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 return true;
             }
         });
 
         checkPermissions();
-
     }
 
     private void checkPermissions() {
@@ -294,25 +308,11 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        final ActionBar bar = this.getActionBar();
-        mPreviousTitle = bar.getTitle();
-        bar.setTitle(R.string.identicons_title);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         File prefsDir = new File(this.getApplicationInfo().dataDir, "shared_prefs");
         File prefsFile = new File(prefsDir, getPreferenceManager().getSharedPreferencesName() + ".xml");
         if (prefsFile.exists()) prefsFile.setReadable(true, false);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        this.getActionBar().setTitle(mPreviousTitle);
     }
 
     @Override
@@ -367,4 +367,23 @@ public class IdenticonsSettings extends PreferenceActivity implements OnPreferen
         return String.format("%08X", color);
     }
 
+    private void setDividerColor(NumberPicker picker, int color) {
+        java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+        for (java.lang.reflect.Field pf : pickerFields) {
+            if (pf.getName().equals("mSelectionDivider")) {
+                pf.setAccessible(true);
+                try {
+                    ColorDrawable colorDrawable = new ColorDrawable(color);
+                    pf.set(picker, colorDrawable);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+    }
 }

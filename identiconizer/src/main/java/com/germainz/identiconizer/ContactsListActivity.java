@@ -16,7 +16,6 @@
 
 package com.germainz.identiconizer;
 
-import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +27,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,8 +42,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import com.germainz.identiconizer.services.IdenticonCreationService;
 import com.germainz.identiconizer.services.IdenticonRemovalService;
@@ -48,8 +50,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class ContactsListActivity extends ListActivity {
-
+public class ContactsListActivity extends AppCompatActivity {
+    RecyclerView mRecyclerView;
     ArrayList<Integer> checkedItems = new ArrayList<>();
     ContactsCursorAdapter mAdapter;
     Cursor mCursor;
@@ -59,14 +61,18 @@ public class ContactsListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_contacts_list);
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         mCursor = getContacts();
-        String[] fromColumns = {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.PHOTO_THUMBNAIL_URI};
-        int[] toViews = {R.id.check, R.id.image};
-        mAdapter = new ContactsCursorAdapter(this, R.layout.image_list_item, mCursor, fromColumns, toViews, 0);
-        setListAdapter(mAdapter);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setTitle(R.string.identicons_contacts_list_title);
+        mAdapter = new ContactsCursorAdapter(this, mCursor);
+        mRecyclerView.setAdapter(mAdapter);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.identicons_contacts_list_title);
     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -86,18 +92,6 @@ public class ContactsListActivity extends ListActivity {
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        CheckedTextView checkedTextView = (CheckedTextView) v.findViewById(R.id.check);
-        boolean isChecked = !checkedTextView.isChecked();
-        if (isChecked)
-            checkedItems.add(position);
-        else
-            checkedItems.remove((Integer) position);
-        checkedTextView.setChecked(isChecked);
     }
 
     @Override
@@ -171,28 +165,41 @@ public class ContactsListActivity extends ListActivity {
         return getContentResolver().query(uri, projection, selection, null, sortOrder);
     }
 
-    public class ContactsCursorAdapter extends SimpleCursorAdapter {
-        private LayoutInflater layoutInflater;
-        private int layout;
+    public class ContactsCursorAdapter extends CursorRecyclerViewAdapter<ContactsCursorAdapter.ViewHolder> {
+        public ContactsCursorAdapter(Context context, Cursor cursor) {
+            super(context, cursor);
+        }
 
-        public ContactsCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
-            super(context, layout, c, from, to, flags);
-            layoutInflater = LayoutInflater.from(context);
-            this.layout = layout;
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public CheckedTextView mCheckedTextView;
+            public ImageView mImageView;
+
+            public ViewHolder(View view) {
+                super(view);
+                mCheckedTextView = view.findViewById(R.id.check);
+                mImageView = view.findViewById(R.id.image);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean isChecked = !mCheckedTextView.isChecked();
+                        if (isChecked)
+                            checkedItems.add(getAdapterPosition());
+                        else
+                            checkedItems.remove((Integer) getAdapterPosition());
+                        mCheckedTextView.setChecked(isChecked);
+                    }
+                });
+            }
         }
 
         @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return layoutInflater.inflate(layout, parent, false);
-        }
+        public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
+            MyListItem myListItem = MyListItem.fromCursor(cursor);
 
-        @Override
-        public void bindView(final View view, Context context, Cursor cursor) {
-            CheckedTextView contactName = (CheckedTextView) view.findViewById(R.id.check);
-            int displayName = cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME);
-            contactName.setText(cursor.getString(displayName));
-            contactName.setChecked(checkedItems.contains(cursor.getPosition()));
-            final ImageView contactImage = (ImageView) view.findViewById(R.id.image);
+            CheckedTextView contactName = viewHolder.mCheckedTextView;
+            contactName.setText(myListItem.getName());
+            contactName.setChecked(checkedItems.contains(myListItem.getPosition()));
+            final ImageView contactImage = viewHolder.mImageView;
             int photoThumbnailURIIndex = cursor.getColumnIndexOrThrow(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
             String photoThumbnailString = cursor.getString(photoThumbnailURIIndex);
             contactImage.setImageResource(R.drawable.ic_identicons_style_retro);
@@ -238,8 +245,57 @@ public class ContactsListActivity extends ListActivity {
                     }
                 }
             }).start();
+        }
 
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.image_list_item, parent, false);
+            ViewHolder vh = new ViewHolder(itemView);
+            return vh;
+        }
+
+        public int getCount() {
+            return getCursor().getCount();
         }
     }
+}
 
+class MyListItem {
+    private String name;
+    private String image;
+    private Integer position;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public static MyListItem fromCursor(Cursor cursor) {
+        MyListItem listItem = new MyListItem();
+        listItem.setName(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME)));
+        listItem.setImage(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI)));
+        listItem.setPosition(cursor.getPosition());
+        return listItem;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }
