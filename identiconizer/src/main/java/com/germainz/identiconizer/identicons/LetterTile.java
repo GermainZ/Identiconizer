@@ -52,8 +52,8 @@ public class LetterTile extends Identicon {
     private static final int TILE_FONT_COLOR = Color.WHITE;
 
     public LetterTile() {
-        Typeface serif = Typeface.create("serif", 0);
-        Typeface sans = Typeface.create("sans-serif-light", 0);
+        Typeface serif = Typeface.create("serif", Typeface.NORMAL);
+        Typeface sans = Typeface.create("sans-serif-light", Typeface.NORMAL);
         if(SERIF) {
             mPaint.setTypeface(serif);
         } else {
