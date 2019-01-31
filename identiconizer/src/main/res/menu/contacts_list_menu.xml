@@ -22,11 +22,13 @@
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_add"
         android:title="@string/button_add"
+        app:iconTint="#000"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_clear"
         android:icon="@drawable/ic_action_clear"
         android:title="@string/button_clear"
+        app:iconTint="#000"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_select_all"
