@@ -1,0 +1,7 @@
+* The app now targets / works on the latest Android version.
+* The app's design is now a bit more modern.
+* Add colors to match Google Messenger theme (contributed by @TiiXel).
+* Add serif font support in options (contributed by @TiiXel).
+* Add option for more than one letter in Gmail Style (contributed by @TiiXel).
+* Add short delay before creating identicons for new contacts, to avoid overwriting DAVdroid photos.
+* App version is now shown in the About screen.

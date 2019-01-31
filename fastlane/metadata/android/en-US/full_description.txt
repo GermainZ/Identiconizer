@@ -1,0 +1,11 @@
+This is a port of ChameleonOS' contact identicons feature (available in the JellyBean versions) with some additional features and fixes. When enabled, new contacts will be assigned a unique identicon instead of the default picture.
+
+Features:
+
+* Use identicons for newly created contacts. A service is normally used to detect new contacts. If you use the Xposed Framework, you can enable Identiconizer! as a module instead to integrate the application into the system.
+* Choose from five different identicon styles: Retro, Contemporary, Spirograph, Dot Matrix and Gmail.
+* Specify the identicon sizes, from 96x96 up to 720x720 (256x256 max on ICS.)
+* Choose a custom background color for the created identicons.
+* Create identicons for all contacts without a photo in one go.
+* Remove identicons from all contacts that have one set.
+* Contacts list to add/remove Identicon to/from wanted contacts only.
